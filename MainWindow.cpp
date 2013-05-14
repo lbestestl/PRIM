@@ -81,28 +81,36 @@ void MainWindow::initWidgets()
     ui->lineEdit_6->setText("b");
     ui->lineEdit_7->setText("c");
     ui->lineEdit_8->setText("d");
+
+    ui->tableWidget->setColumnWidth(0, 70);
+    ui->tableWidget->setColumnWidth(1, 100);
+    ui->tableWidget->setColumnWidth(2, 140);
+    ui->tableWidget->setColumnWidth(3, 240);
+    ui->tableWidget->setColumnWidth(4, 70);
 }
 
 
 void MainWindow::registerData()
 {
-    CrackdownInfo *a = new CrackdownInfo();
+    CrackdownInfo *data = new CrackdownInfo();
     CrackdownInfo *b = new CrackdownInfo();
-    a->num = "11가1234";
-    a->time = "2013-02-07 15:59";
-    a->location = "apple street";
-    a->img1 = "/home/lbestestl/Pictures/move/export_img/A.jpg";
+    data->num = "11가1234";
+    data->time = "2013-02-07 15:59:23";
+    data->location = "apple street";
+    data->img1 = "/home/lbestestl/Pictures/move/export_img/A.jpg";
     b->num = "991234";
-    b->time = "2013-03-01 15:58";
+    b->time = "2013-03-01 15:58:42";
     b->location = "banana street";
     b->img1 = "/home/lbestestl/Pictures/move/export_img/b.jpg";
-    info.push_back(a);
+    info.push_back(data);
     info.push_back(b);
+
 }
 
 
 void MainWindow::searchData()
 {
+    int c = ui->tableWidget->columnCount();
     infoCell.clear();
     for (; ui->tableWidget->rowCount() > 0; ) {
         ui->tableWidget->removeRow(ui->tableWidget->rowCount()-1);
@@ -110,19 +118,19 @@ void MainWindow::searchData()
     for (int i = 0; i < info.size(); i++) {
         ui->tableWidget->insertRow(ui->tableWidget->rowCount());
         infoCell.push_back(new QTableWidgetItem);
-        ui->tableWidget->setItem(i, 0, infoCell[5*i]);
+        ui->tableWidget->setItem(i, 0, infoCell[c*i]);
         ui->tableWidget->item(i, 0)->setText(QString::number(info[i]->id));
         infoCell.push_back(new QTableWidgetItem);
-        ui->tableWidget->setItem(i, 1, infoCell[5*i+1]);
+        ui->tableWidget->setItem(i, 1, infoCell[c*i+1]);
         ui->tableWidget->item(i, 1)->setText(QString::fromStdString(info[i]->num));
         infoCell.push_back(new QTableWidgetItem);
-        ui->tableWidget->setItem(i, 2, infoCell[5*i+2]);
+        ui->tableWidget->setItem(i, 2, infoCell[c*i+2]);
         ui->tableWidget->item(i, 2)->setText(QString::fromStdString(info[i]->time));
         infoCell.push_back(new QTableWidgetItem);
-        ui->tableWidget->setItem(i, 3, infoCell[5*i+3]);
+        ui->tableWidget->setItem(i, 3, infoCell[c*i+3]);
         ui->tableWidget->item(i, 3)->setText(QString::fromStdString(info[i]->location));
         infoCell.push_back(new QTableWidgetItem);
-        ui->tableWidget->setItem(i, 4, infoCell[5*i+4]);
+        ui->tableWidget->setItem(i, 4, infoCell[c*i+4]);
         ui->tableWidget->item(i, 4)->setText(QString::number(info[i]->division));
     }
 }
@@ -131,27 +139,35 @@ void MainWindow::searchData()
 void MainWindow::modifyData()
 {
     int r = ui->tableWidget->currentRow();
-    info[r]->num = ui->lineEdit->text().toStdString();
-    ui->tableWidget->item(r, 1)->setText(QString::fromStdString(info[r]->num));
-    info[r]->time = ui->dateTimeEdit_3->text().toStdString();
-    ui->tableWidget->item(r, 2)->setText(QString::fromStdString(info[r]->time));
-    info[r]->location = ui->lineEdit_2->text().toStdString();
-    ui->tableWidget->item(r, 3)->setText(QString::fromStdString(info[r]->location));
-//    info[r]->division = ui->comboBox_3->currentText().toInt();
-//    ui->tableWidget->item(r, 4)->setText(QString::number(info[r]->division));
+    if (r >= 0) {
+        info[r]->num = ui->lineEdit->text().toStdString();
+        ui->tableWidget->item(r, 1)->setText(QString::fromStdString(info[r]->num));
+        info[r]->time = ui->dateTimeEdit_3->text().toStdString();
+        ui->tableWidget->item(r, 2)->setText(QString::fromStdString(info[r]->time));
+        info[r]->location = ui->lineEdit_2->text().toStdString();
+        ui->tableWidget->item(r, 3)->setText(QString::fromStdString(info[r]->location));
+//      info[r]->division = ui->comboBox_3->currentText().toInt();
+//      ui->tableWidget->item(r, 4)->setText(QString::number(info[r]->division));
+    }
 }
 
 
 void MainWindow::deleteData()
 {
     int r = ui->tableWidget->currentRow();
-    ui->tableWidget->removeRow(r);
-    for (int i = 0; i < ui->tableWidget->currentColumn(); i++) {
-        delete infoCell[5*r + i];
-        infoCell.erase(infoCell.begin() + 5*r, infoCell.begin() + 5*(r+1));
+    int c = ui->tableWidget->columnCount();
+    if (r >= 0) {
+        for (int i = 0; i < c; i++) {
+            delete infoCell[c*r + i];
+        }
+        infoCell.remove(c*r, c);
+        ui->tableWidget->removeRow(r);
+
+        delete info[r];
+        info.erase(info.begin()+r, info.begin()+r+1);
     }
-    delete info[r];
-    info.erase(info.begin()+r, info.begin()+r+1);
+    if (r < ui->tableWidget->rowCount())
+        ui->tableWidget->selectRow(r);
 }
 
 
@@ -194,8 +210,13 @@ void MainWindow::tableSelectionChanged()
 {
     int row = ui->tableWidget->currentRow();
     int col = ui->tableWidget->currentColumn();
-    ui->lineEdit->setText(ui->tableWidget->item(row, 1)->text());
-    ui->lineEdit_2->setText(ui->tableWidget->item(row, 3)->text());
-    ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(ui->tableWidget->item(row, 2)->text(), "yyyy-MM-dd hh:mm"));
-    imgLable[0]->setPixmap(QPixmap(QString::fromStdString(info[row]->img1)));
+    if (row >= 0) {
+        ui->lineEdit->setText(ui->tableWidget->item(row, 1)->text());
+        ui->lineEdit_2->setText(ui->tableWidget->item(row, 3)->text());
+        ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(ui->tableWidget->item(row, 2)->text(), "yyyy-MM-dd hh:mm:ss"));
+        imgLable[0]->setPixmap(QPixmap(QString::fromStdString(info[row]->img1)));
+        imgLable[1]->setPixmap(QPixmap(QString::fromStdString(info[row]->img2)));
+        imgLable[2]->setPixmap(QPixmap(QString::fromStdString(info[row]->img3)));
+        imgLable[3]->setPixmap(QPixmap(QString::fromStdString(info[row]->img4)));
+    }
 }
