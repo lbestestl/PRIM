@@ -100,10 +100,9 @@ void MainWindow::registerData()
     data->time = "2013-02-07 15:59:23";
     data->location = "apple street";
     data->img1 = "/home/lbestestl/Pictures/move/export_img/A.jpg";
-    data->img2 = "/home/lbestestl/Pictures/move/export_img/B.jpg";
-    data->img3 = "/home/lbestestl/Pictures/move/export_img/C.jpg";
-    data->img4 = "/home/lbestestl/Pictures/move/export_img/D.jpg";
-    d->addCrackdownInfo(data);
+    info.push_back(data);
+    info.push_back(b);
+
 }
 
 

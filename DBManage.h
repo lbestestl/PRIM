@@ -9,9 +9,23 @@
 #define DBMANAGE_H
 
 
+#include "CrackdownInfo.h"
+#include <QtSql/QtSql>
+
+
 class DBManage
 {
 public:
+    DBManage();
+    ~DBManage();
+
+    void addCrackdownInfo(CrackdownInfo*);
+    void dropCrackdownInfo(CrackdownInfo*);
+    void modifyCrackdownInfo(CrackdownInfo*);
+    CrackdownInfo* searchCrackdownInfo();
+
+private:
+    QSqlDatabase db;
 
 };
 
