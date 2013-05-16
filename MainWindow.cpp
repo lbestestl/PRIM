@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "DBManage.h"
+#include "UserSettings.h"
 
 #include <QDateTime>
 #include <QFileDialog>
@@ -79,10 +80,10 @@ void MainWindow::initWidgets()
     ui->dateTimeEdit->setDate(QDate::currentDate());
     ui->dateTimeEdit_2->setDate(QDate::currentDate());
     ui->dateTimeEdit_3->setDateTime(QDateTime::currentDateTime());
-    ui->lineEdit_5->setText("");
-    ui->lineEdit_6->setText("");
-    ui->lineEdit_7->setText("");
-    ui->lineEdit_8->setText("");
+    ui->lineEdit_5->setText(theUserSettings().importPath);
+    ui->lineEdit_6->setText(theUserSettings().workspacePath);
+    ui->lineEdit_7->setText(theUserSettings().backUpPath);
+    ui->lineEdit_8->setText(theUserSettings().exportPath);
 
     ui->tableWidget->setColumnWidth(0, 70);
     ui->tableWidget->setColumnWidth(1, 100);
@@ -95,6 +96,7 @@ void MainWindow::initWidgets()
 void MainWindow::registerData()
 {
     DBManage* d = new DBManage();
+
     CrackdownInfo *data = new CrackdownInfo();
     data->num = "11가1234";
     data->time = "2013-02-07 15:59:23";
@@ -103,6 +105,8 @@ void MainWindow::registerData()
     data->img2 = "/home/lbestestl/Pictures/move/export_img/B.jpg";
     data->img3 = "/home/lbestestl/Pictures/move/export_img/C.jpg";
     data->img4 = "/home/lbestestl/Pictures/move/export_img/D.jpg";
+    delete data;
+
     d->addCrackdownInfo(data);
 }
 
@@ -184,7 +188,18 @@ void MainWindow::excelData()
 
 void MainWindow::option()
 {
-
+    theUserSettings().importPath = ui->lineEdit_5->text();
+    theUserSettings().workspacePath = ui->lineEdit_6->text();
+    theUserSettings().backUpPath = ui->lineEdit_7->text();
+    theUserSettings().exportPath = ui->lineEdit_8->text();
+//    theUserSettings().searchStartId = ui->spinBox->value();
+//    theUserSettings().searchEndId = ui->spinBox_2->value();
+//    theUserSettings().searchStartId = 0;
+//    theUserSettings().searchEndId = 999999;
+    theUserSettings().searchLocation = ui->lineEdit_3->text().toInt();
+    theUserSettings().searchNum = ui->lineEdit_4->text().toInt();
+    theUserSettings().importPath = "/////";
+    theUserSettings().storeToFile();
 }
 
 
