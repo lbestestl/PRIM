@@ -80,10 +80,17 @@ void MainWindow::initWidgets()
     ui->dateTimeEdit->setDate(QDate::currentDate());
     ui->dateTimeEdit_2->setDate(QDate::currentDate());
     ui->dateTimeEdit_3->setDateTime(QDateTime::currentDateTime());
-    ui->lineEdit_5->setText(theUserSettings().importPath);
-    ui->lineEdit_6->setText(theUserSettings().workspacePath);
-    ui->lineEdit_7->setText(theUserSettings().backUpPath);
-    ui->lineEdit_8->setText(theUserSettings().exportPath);
+
+    ui->lineEdit_5->setText(UserSettings::Instance()->importPath);
+    ui->lineEdit_6->setText(UserSettings::Instance()->workspacePath);
+    ui->lineEdit_7->setText(UserSettings::Instance()->backUpPath);
+    ui->lineEdit_8->setText(UserSettings::Instance()->exportPath);
+
+    ui->lineEdit_3->setText(UserSettings::Instance()->searchLocation);
+    ui->lineEdit_4->setText(UserSettings::Instance()->searchNum);
+
+    ui->spinBox->setValue(UserSettings::Instance()->searchStartId);
+    ui->spinBox_2->setValue(UserSettings::Instance()->searchEndId);
 
     ui->tableWidget->setColumnWidth(0, 70);
     ui->tableWidget->setColumnWidth(1, 100);
@@ -95,7 +102,6 @@ void MainWindow::initWidgets()
 
 void MainWindow::registerData()
 {
-    DBManage* d = new DBManage();
 
     CrackdownInfo *data = new CrackdownInfo();
     data->num = "11가1234";
@@ -105,9 +111,10 @@ void MainWindow::registerData()
     data->img2 = "/home/lbestestl/Pictures/move/export_img/B.jpg";
     data->img3 = "/home/lbestestl/Pictures/move/export_img/C.jpg";
     data->img4 = "/home/lbestestl/Pictures/move/export_img/D.jpg";
+
+    DBManage::Instance()->addCrackdownInfo(data);
     delete data;
 
-    d->addCrackdownInfo(data);
 }
 
 
@@ -125,13 +132,13 @@ void MainWindow::searchData()
         ui->tableWidget->item(i, 0)->setText(QString::number(info[i]->id));
         infoCell.push_back(new QTableWidgetItem);
         ui->tableWidget->setItem(i, 1, infoCell[c*i+1]);
-        ui->tableWidget->item(i, 1)->setText(QString::fromStdString(info[i]->num));
+        ui->tableWidget->item(i, 1)->setText(info[i]->num);
         infoCell.push_back(new QTableWidgetItem);
         ui->tableWidget->setItem(i, 2, infoCell[c*i+2]);
-        ui->tableWidget->item(i, 2)->setText(QString::fromStdString(info[i]->time));
+        ui->tableWidget->item(i, 2)->setText(info[i]->time);
         infoCell.push_back(new QTableWidgetItem);
         ui->tableWidget->setItem(i, 3, infoCell[c*i+3]);
-        ui->tableWidget->item(i, 3)->setText(QString::fromStdString(info[i]->location));
+        ui->tableWidget->item(i, 3)->setText(info[i]->location);
         infoCell.push_back(new QTableWidgetItem);
         ui->tableWidget->setItem(i, 4, infoCell[c*i+4]);
         ui->tableWidget->item(i, 4)->setText(QString::number(info[i]->division));
@@ -143,12 +150,12 @@ void MainWindow::modifyData()
 {
     int r = ui->tableWidget->currentRow();
     if (r >= 0) {
-        info[r]->num = ui->lineEdit->text().toStdString();
-        ui->tableWidget->item(r, 1)->setText(QString::fromStdString(info[r]->num));
-        info[r]->time = ui->dateTimeEdit_3->text().toStdString();
-        ui->tableWidget->item(r, 2)->setText(QString::fromStdString(info[r]->time));
-        info[r]->location = ui->lineEdit_2->text().toStdString();
-        ui->tableWidget->item(r, 3)->setText(QString::fromStdString(info[r]->location));
+        info[r]->num = ui->lineEdit->text();
+        ui->tableWidget->item(r, 1)->setText(info[r]->num);
+        info[r]->time = ui->dateTimeEdit_3->text();
+        ui->tableWidget->item(r, 2)->setText(info[r]->time);
+        info[r]->location = ui->lineEdit_2->text();
+        ui->tableWidget->item(r, 3)->setText(info[r]->location);
 //      info[r]->division = ui->comboBox_3->currentText().toInt();
 //      ui->tableWidget->item(r, 4)->setText(QString::number(info[r]->division));
     }
@@ -188,18 +195,15 @@ void MainWindow::excelData()
 
 void MainWindow::option()
 {
-    theUserSettings().importPath = ui->lineEdit_5->text();
-    theUserSettings().workspacePath = ui->lineEdit_6->text();
-    theUserSettings().backUpPath = ui->lineEdit_7->text();
-    theUserSettings().exportPath = ui->lineEdit_8->text();
-//    theUserSettings().searchStartId = ui->spinBox->value();
-//    theUserSettings().searchEndId = ui->spinBox_2->value();
-//    theUserSettings().searchStartId = 0;
-//    theUserSettings().searchEndId = 999999;
-    theUserSettings().searchLocation = ui->lineEdit_3->text().toInt();
-    theUserSettings().searchNum = ui->lineEdit_4->text().toInt();
-    theUserSettings().importPath = "/////";
-    theUserSettings().storeToFile();
+    UserSettings::Instance()->importPath = ui->lineEdit_5->text();
+    UserSettings::Instance()->workspacePath = ui->lineEdit_6->text();
+    UserSettings::Instance()->backUpPath = ui->lineEdit_7->text();
+    UserSettings::Instance()->exportPath = ui->lineEdit_8->text();
+    UserSettings::Instance()->searchStartId = ui->spinBox->value();
+    UserSettings::Instance()->searchEndId = ui->spinBox_2->value();
+    UserSettings::Instance()->searchLocation = ui->lineEdit_3->text();
+    UserSettings::Instance()->searchNum = ui->lineEdit_4->text();
+    UserSettings::Instance()->storeToFile();
 }
 
 
@@ -228,9 +232,9 @@ void MainWindow::tableSelectionChanged()
         ui->lineEdit->setText(ui->tableWidget->item(row, 1)->text());
         ui->lineEdit_2->setText(ui->tableWidget->item(row, 3)->text());
         ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(ui->tableWidget->item(row, 2)->text(), "yyyy-MM-dd hh:mm:ss"));
-        imgLable[0]->setPixmap(QPixmap(QString::fromStdString(info[row]->img1)));
-        imgLable[1]->setPixmap(QPixmap(QString::fromStdString(info[row]->img2)));
-        imgLable[2]->setPixmap(QPixmap(QString::fromStdString(info[row]->img3)));
-        imgLable[3]->setPixmap(QPixmap(QString::fromStdString(info[row]->img4)));
+        imgLable[0]->setPixmap(QPixmap(info[row]->img1));
+        imgLable[1]->setPixmap(QPixmap(info[row]->img2));
+        imgLable[2]->setPixmap(QPixmap(info[row]->img3));
+        imgLable[3]->setPixmap(QPixmap(info[row]->img4));
     }
 }

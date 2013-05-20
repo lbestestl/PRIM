@@ -15,8 +15,12 @@
 class UserSettings
 {
 public:
+    static UserSettings* Instance();
+
     void storeToFile();
     void setDefault();
+
+    void setImportPath(QString);
 
     QString importPath;
     QString exportPath;
@@ -28,14 +32,10 @@ public:
     QString searchLocation;
     QString searchNum;
 
-    friend UserSettings theUserSettings();
-
 private:
     UserSettings();
+    static UserSettings* instance;
 };
-
-
-UserSettings theUserSettings();
 
 
 #endif // USERSETTINGS_H

@@ -16,8 +16,8 @@
 class DBManage
 {
 public:
-    DBManage();
     ~DBManage();
+    static DBManage* Instance();
 
     void addCrackdownInfo(CrackdownInfo*);
     void dropCrackdownInfo(CrackdownInfo*);
@@ -25,7 +25,9 @@ public:
     CrackdownInfo* searchCrackdownInfo();
 
 private:
-    QSqlDatabase db;
+    DBManage();
+    QSqlDatabase* db;
+    static DBManage* instance;
 
 };
 

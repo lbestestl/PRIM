@@ -19,7 +19,7 @@ UserSettings::UserSettings()
         QErrorMessage em;
         em.showMessage(QString::fromStdString("Does not exist file. settings.dat"));
         em.exec();
-    } else if (!f.open(QIODevice::ReadWrite | QIODevice::Text)) {
+    } else if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QErrorMessage em;
         em.showMessage(QString::fromStdString("cannot open or create settings.dat"));
         em.exec();
@@ -38,16 +38,18 @@ UserSettings::UserSettings()
 }
 
 
-UserSettings theUserSettings()
+UserSettings* UserSettings::instance = 0;
+UserSettings* UserSettings::Instance()
 {
-    static UserSettings u;
-    return u;
+    if (instance == 0)
+        instance = new UserSettings();
+    return instance;
 }
 
 
 void UserSettings::storeToFile() {
     QFile f("settings.dat");
-    if (!f.open(QIODevice::ReadWrite | QIODevice::Text)) {
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QErrorMessage em;
         em.showMessage(QString::fromStdString("cannot open or create settings.dat"));
         em.exec();
@@ -63,4 +65,10 @@ void UserSettings::storeToFile() {
             << searchLocation << "\n"
             << searchNum;
     }
+}
+
+
+void UserSettings::setImportPath(QString a)
+{
+    importPath = a;
 }

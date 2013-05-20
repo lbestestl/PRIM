@@ -9,7 +9,7 @@
 #define CRACKDOWNINFO_H
 
 
-#include <string>
+#include <QString>
 
 
 class CrackdownInfo
@@ -17,13 +17,13 @@ class CrackdownInfo
 public:
 //    CrackdownInfo();
     int id;
-    std::string num;
-    std::string time;
-    std::string location;
-    std::string img1;
-    std::string img2;
-    std::string img3;
-    std::string img4;
+    QString num;
+    QString time;
+    QString location;
+    QString img1;
+    QString img2;
+    QString img3;
+    QString img4;
     int division;
 };
 
