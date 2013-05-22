@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QFileDialog>
 #include <QSignalMapper>
+#include <QErrorMessage>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -13,9 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    initWidgets();
     compilingWidegts();
     connectWidgets();
-    initWidgets();
 }
 
 
@@ -70,7 +71,7 @@ void MainWindow::connectWidgets()
         sigMapFolder->setMapping(folderSelectionButton[i], i);
     }
     connect(sigMapFolder, SIGNAL(mapped(int)), this, SLOT(selectFolder(int)));
-    connect(ui->tableWidget, SIGNAL(itemSelectionChanged()), this, SLOT(tableSelectionChanged()));
+    connect(ui->tableView, SIGNAL(selectionChanged(const QItemSelection & )), this, SLOT(tableSelectionChanged()));
 
 }
 
@@ -92,11 +93,15 @@ void MainWindow::initWidgets()
     ui->spinBox->setValue(UserSettings::Instance()->searchStartId);
     ui->spinBox_2->setValue(UserSettings::Instance()->searchEndId);
 
-    ui->tableWidget->setColumnWidth(0, 70);
-    ui->tableWidget->setColumnWidth(1, 100);
-    ui->tableWidget->setColumnWidth(2, 140);
-    ui->tableWidget->setColumnWidth(3, 240);
-    ui->tableWidget->setColumnWidth(4, 70);
+    ui->tableView->setModel(&DBManage::Instance()->dbq);
+    ui->tableView->setColumnWidth(0, 70);
+    ui->tableView->setColumnWidth(1, 100);
+    ui->tableView->setColumnWidth(2, 220);
+    ui->tableView->setColumnWidth(3, 160);
+    ui->tableView->setColumnWidth(4, 120);
+    ui->tableView->show();
+
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 
@@ -120,111 +125,78 @@ void MainWindow::registerData()
 
 void MainWindow::searchData()
 {
-/*    int c = ui->tableWidget->columnCount();
-    infoCell.clear();
-    for (; ui->tableWidget->rowCount() > 0; ) {
-        ui->tableWidget->removeRow(ui->tableWidget->rowCount()-1);
-    }
-    for (int i = 0; i < info.size(); i++) {
-        ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-        infoCell.push_back(new QTableWidgetItem);
-        ui->tableWidget->setItem(i, 0, infoCell[c*i]);
-        ui->tableWidget->item(i, 0)->setText(QString::number(info[i]->id));
-        infoCell.push_back(new QTableWidgetItem);
-        ui->tableWidget->setItem(i, 1, infoCell[c*i+1]);
-        ui->tableWidget->item(i, 1)->setText(info[i]->num);
-        infoCell.push_back(new QTableWidgetItem);
-        ui->tableWidget->setItem(i, 2, infoCell[c*i+2]);
-        ui->tableWidget->item(i, 2)->setText(info[i]->time);
-        infoCell.push_back(new QTableWidgetItem);
-        ui->tableWidget->setItem(i, 3, infoCell[c*i+3]);
-        ui->tableWidget->item(i, 3)->setText(info[i]->location);
-        infoCell.push_back(new QTableWidgetItem);
-        ui->tableWidget->setItem(i, 4, infoCell[c*i+4]);
-        ui->tableWidget->item(i, 4)->setText(QString::number(info[i]->division));
-    }*/
     bool cond = false;
-    QString q = "Select * from crackdowninfo";
+    QString q = "Select id, num, location, time, division from crackdowninfo";
     if (ui->checkBox->isChecked()) {
         //순번
-        if (cond) {
-            q += "where id > " + QString::number(ui->spinBox->value()) + " and id < " + QString::number(ui->spinBox_2->value());
+        if (!cond) {
+            q += " where id >= " + QString::number(ui->spinBox->value()) + " and id <= " + QString::number(ui->spinBox_2->value());
         } else {
-            q += "and id > " + QString::number(ui->spinBox->value()) + " and id < " + QString::number(ui->spinBox_2->value());
+            q += " and id >= " + QString::number(ui->spinBox->value()) + " and id <= " + QString::number(ui->spinBox_2->value());
         }
         cond = true;
     }
     if (ui->checkBox_2->isChecked()) {
         //시간
-        if (cond) {
-            q += "where time > '" + ui->dateTimeEdit->text() + "' and time < '" + ui->dateTimeEdit_2->text() + "'";
+        if (!cond) {
+            q += " where time >= '" + ui->dateTimeEdit->text() + "' and time <= '" + ui->dateTimeEdit_2->text() + "'";
         } else {
-            q += "and time > '" + ui->dateTimeEdit->text() + "' and time < '" + ui->dateTimeEdit_2->text() + "'";
+            q += " and time >= '" + ui->dateTimeEdit->text() + "' and time <= '" + ui->dateTimeEdit_2->text() + "'";
         }
         cond = true;
     }
     if (ui->checkBox_3->isChecked()) {
         //장소
-        if (cond) {
-            q += "where location like '%" + ui->lineEdit_3->text() + "'";
+        if (!cond) {
+            q += " where location like '%" + ui->lineEdit_3->text() + "%'";
         } else {
-            q += "and location like '%" + ui->lineEdit_3->text() + "'";
+            q += " and location like '%" + ui->lineEdit_3->text() + "%'";
         }
         cond = true;
     }
     if (ui->checkBox_4->isChecked()) {
         //번호
-        if (cond) {
-            q += "where num like '%" + ui->lineEdit_4->text() + "'";
+        if (!cond) {
+            q += " where num like '%" + ui->lineEdit_4->text() + "%'";
         } else {
-            q += "and num like '%" + ui->lineEdit_4->text() + "'";
+            q += " and num like '%" + ui->lineEdit_4->text() + "%'";
         }
         cond = true;
     }
     if (ui->checkBox_5->isChecked()) {
-        if (cond) {
-            q += "where division = '" + ui->comboBox->currentText() + "'";
+        if (!cond) {
+            q += " where division = '" + ui->comboBox->currentText() + "'";
         } else {
-            q += "and division = '" + ui->comboBox->currentText() + "'";
+            q += " and division = '" + ui->comboBox->currentText() + "'";
         }
         cond = true;
     }
+    ui->label_23->setText(q);
+    DBManage::Instance()->dbq.setQuery(q);
+
+
     DBManage::Instance()->searchCrackdownInfo(q);
+
+    ui->tableView->setSortingEnabled(true);
+    ui->tableView->show();
 }
 
 
 void MainWindow::modifyData()
 {
-    int r = ui->tableWidget->currentRow();
-    if (r >= 0) {
-        info[r]->num = ui->lineEdit->text();
-        ui->tableWidget->item(r, 1)->setText(info[r]->num);
-        info[r]->time = ui->dateTimeEdit_3->text();
-        ui->tableWidget->item(r, 2)->setText(info[r]->time);
-        info[r]->location = ui->lineEdit_2->text();
-        ui->tableWidget->item(r, 3)->setText(info[r]->location);
-//      info[r]->division = ui->comboBox_3->currentText().toInt();
-//      ui->tableWidget->item(r, 4)->setText(QString::number(info[r]->division));
-    }
+
 }
 
 
 void MainWindow::deleteData()
 {
-    int r = ui->tableWidget->currentRow();
-    int c = ui->tableWidget->columnCount();
-    if (r >= 0) {
-        for (int i = 0; i < c; i++) {
-            delete infoCell[c*r + i];
-        }
-        infoCell.remove(c*r, c);
-        ui->tableWidget->removeRow(r);
-
-        delete info[r];
-        info.erase(info.begin()+r, info.begin()+r+1);
+    QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
+    for (int i = 0; i < indexes.count(); i++) {
+        int r = indexes.at(i).row();
+        int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
+        DBManage::Instance()->dropCrackdownInfo(id);
     }
-    if (r < ui->tableWidget->rowCount())
-        ui->tableWidget->selectRow(r);
+    searchData();
 }
 
 
@@ -273,12 +245,12 @@ void MainWindow::selectFolder(int index)
 
 void MainWindow::tableSelectionChanged()
 {
-    int row = ui->tableWidget->currentRow();
-    int col = ui->tableWidget->currentColumn();
+    ui->tableView->currentIndex();
+    int row = 0;
     if (row >= 0) {
-        ui->lineEdit->setText(ui->tableWidget->item(row, 1)->text());
-        ui->lineEdit_2->setText(ui->tableWidget->item(row, 3)->text());
-        ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(ui->tableWidget->item(row, 2)->text(), "yyyy-MM-dd hh:mm:ss"));
+//        ui->lineEdit->setText(ui->tableView->item(row, 1)->text());
+//        ui->lineEdit_2->setText(ui->tableView->item(row, 3)->text());
+//        ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(ui->tableView->item(row, 2)->text(), "yyyy-MM-dd hh:mm:ss"));
         imgLable[0]->setPixmap(QPixmap(info[row]->img1));
         imgLable[1]->setPixmap(QPixmap(info[row]->img2));
         imgLable[2]->setPixmap(QPixmap(info[row]->img3));

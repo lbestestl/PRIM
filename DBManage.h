@@ -19,14 +19,16 @@ public:
     static DBManage* Instance();
 
     void addCrackdownInfo(CrackdownInfo*);
-    void dropCrackdownInfo(CrackdownInfo*);
+    void dropCrackdownInfo(int id);
     void modifyCrackdownInfo(CrackdownInfo*);
     CrackdownInfo* searchCrackdownInfo(QString);
+    QSqlDatabase db;
+    QSqlQueryModel dbq;
 
 private:
     DBManage();
     ~DBManage();
-    QSqlDatabase db;
+
     static DBManage* instance;
 
 };

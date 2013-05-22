@@ -28,6 +28,7 @@ DBManage::DBManage()
         query.prepare("CREATE TABLE \"crackdownInfo\" ( \"id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \"num\" TEXT NOT NULL, \"location\" TEXT NOT NULL, \"time\" TEXT NOT NULL, \"img1\" TEXT, \"img2\" TEXT, \"img3\" TEXT, \"img4\" TEXT, \"division\" TEXT NOT NULL)");
         query.exec();
     }
+
 }
 
 
@@ -56,10 +57,10 @@ void DBManage::addCrackdownInfo(CrackdownInfo* data)
 }
 
 
-void DBManage::dropCrackdownInfo(CrackdownInfo* data)
+void DBManage::dropCrackdownInfo(int id)
 {
     QSqlQuery query(db);
-    QString q = "delete from crackdownInfo where id = " + data->id;
+    QString q = "delete from crackdownInfo where id = " + QString::number(id);
     query.exec(q);
 }
 
