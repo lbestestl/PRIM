@@ -24,7 +24,7 @@ public:
     QString img2;
     QString img3;
     QString img4;
-    int division;
+    QString division;
 };
 
 

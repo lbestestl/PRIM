@@ -16,17 +16,17 @@
 class DBManage
 {
 public:
-    ~DBManage();
     static DBManage* Instance();
 
     void addCrackdownInfo(CrackdownInfo*);
     void dropCrackdownInfo(CrackdownInfo*);
     void modifyCrackdownInfo(CrackdownInfo*);
-    CrackdownInfo* searchCrackdownInfo();
+    CrackdownInfo* searchCrackdownInfo(QString);
 
 private:
     DBManage();
-    QSqlDatabase* db;
+    ~DBManage();
+    QSqlDatabase db;
     static DBManage* instance;
 
 };

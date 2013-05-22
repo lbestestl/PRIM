@@ -13,20 +13,19 @@
 
 DBManage::DBManage()
 {
-    db = new QSqlDatabase();
-    *db = QSqlDatabase::addDatabase("QSQLITE");
-    db->setDatabaseName(QDir::currentPath() + QDir::separator() + "crackdowndb.sqlite");
-    db->open();
-    if (!db->open()) {
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(QDir::currentPath() + QDir::separator() + "crackdowndb.sqlite");
+    db.open();
+    if (!db.open()) {
         QErrorMessage em;
         em.showMessage(QString::fromStdString("cannot open database"));
         em.exec();
         exit(0);
     }
-    if (!db->tables().contains("crackdowninfo")) {
+    if (!db.tables().contains("crackdowninfo")) {
         //copy default.sqlite -> crackdowndb.sqlite
-        QSqlQuery query(*db);
-        query.prepare("CREATE TABLE \"crackdownInfo\" ( \"id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \"num\" TEXT NOT NULL, \"location\" TEXT NOT NULL, \"time\" TEXT NOT NULL, \"img1\" TEXT, \"img2\" TEXT, \"img3\" TEXT, \"img4\" TEXT, \"division\" INTEGER NOT NULL)");
+        QSqlQuery query(db);
+        query.prepare("CREATE TABLE \"crackdownInfo\" ( \"id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \"num\" TEXT NOT NULL, \"location\" TEXT NOT NULL, \"time\" TEXT NOT NULL, \"img1\" TEXT, \"img2\" TEXT, \"img3\" TEXT, \"img4\" TEXT, \"division\" TEXT NOT NULL)");
         query.exec();
     }
 }
@@ -34,7 +33,9 @@ DBManage::DBManage()
 
 DBManage::~DBManage()
 {
-    db->close();
+    db.close();
+    delete instance;
+    instance = NULL;
 }
 
 
@@ -42,24 +43,22 @@ DBManage* DBManage::instance = 0;
 DBManage* DBManage::Instance()
 {
     if (instance == 0)
-        instance == new DBManage();
+        instance = new DBManage;
     return instance;
 }
 
 
 void DBManage::addCrackdownInfo(CrackdownInfo* data)
 {
-    QSqlQuery query(*db);
-//    QString q = "insert into crackdownInfo values(NULL, '" + data->num + "', '" + data->location + "', '" + data->time + "', '" + data->img1 + "', '" + data->img2 + "', '" + data->img3 + "', '" + data->img4 + "', " + QString::number(data->division) + ")";
-//    query.exec(q);
-    query.prepare("insert into crackdowninfo values(NULL, 'n', 'l', '2013-01-01 13:45:23', 'i1', 'i2', 'i3', 'i4', 1)");
-    query.exec();
+    QSqlQuery query(db);
+    QString q = "insert into crackdownInfo values(NULL, '" + data->num + "', '" + data->location + "', '" + data->time + "', '" + data->img1 + "', '" + data->img2 + "', '" + data->img3 + "', '" + data->img4 + "', '" + data->division + "')";
+    query.exec(q);
 }
 
 
 void DBManage::dropCrackdownInfo(CrackdownInfo* data)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     QString q = "delete from crackdownInfo where id = " + data->id;
     query.exec(q);
 }
@@ -67,7 +66,7 @@ void DBManage::dropCrackdownInfo(CrackdownInfo* data)
 
 void DBManage::modifyCrackdownInfo(CrackdownInfo* data)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("update crackdownInfo set num = ?, set location = ?, set time = ?, set img1 = ?, set img2 = ?, set img3 = ?, set img4 =?, set division = ? where id = ?");
     query.addBindValue(data->num);
     query.addBindValue(data->location);
@@ -82,7 +81,9 @@ void DBManage::modifyCrackdownInfo(CrackdownInfo* data)
 }
 
 
-CrackdownInfo* DBManage::searchCrackdownInfo()
+CrackdownInfo* DBManage::searchCrackdownInfo(QString q)
 {
+    QSqlQuery query(db);
+    query.exec(q);
     return NULL;
 }

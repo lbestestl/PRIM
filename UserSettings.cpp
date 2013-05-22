@@ -38,11 +38,19 @@ UserSettings::UserSettings()
 }
 
 
+UserSettings::~UserSettings()
+{
+    delete instance;
+    instance = NULL;
+
+}
+
+
 UserSettings* UserSettings::instance = 0;
 UserSettings* UserSettings::Instance()
 {
     if (instance == 0)
-        instance = new UserSettings();
+        instance = new UserSettings;
     return instance;
 }
 

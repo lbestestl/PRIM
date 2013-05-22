@@ -34,6 +34,7 @@ public:
 
 private:
     UserSettings();
+    ~UserSettings();
     static UserSettings* instance;
 };
 

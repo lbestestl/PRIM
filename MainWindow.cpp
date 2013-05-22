@@ -120,7 +120,7 @@ void MainWindow::registerData()
 
 void MainWindow::searchData()
 {
-    int c = ui->tableWidget->columnCount();
+/*    int c = ui->tableWidget->columnCount();
     infoCell.clear();
     for (; ui->tableWidget->rowCount() > 0; ) {
         ui->tableWidget->removeRow(ui->tableWidget->rowCount()-1);
@@ -142,7 +142,54 @@ void MainWindow::searchData()
         infoCell.push_back(new QTableWidgetItem);
         ui->tableWidget->setItem(i, 4, infoCell[c*i+4]);
         ui->tableWidget->item(i, 4)->setText(QString::number(info[i]->division));
+    }*/
+    bool cond = false;
+    QString q = "Select * from crackdowninfo";
+    if (ui->checkBox->isChecked()) {
+        //순번
+        if (cond) {
+            q += "where id > " + QString::number(ui->spinBox->value()) + " and id < " + QString::number(ui->spinBox_2->value());
+        } else {
+            q += "and id > " + QString::number(ui->spinBox->value()) + " and id < " + QString::number(ui->spinBox_2->value());
+        }
+        cond = true;
     }
+    if (ui->checkBox_2->isChecked()) {
+        //시간
+        if (cond) {
+            q += "where time > '" + ui->dateTimeEdit->text() + "' and time < '" + ui->dateTimeEdit_2->text() + "'";
+        } else {
+            q += "and time > '" + ui->dateTimeEdit->text() + "' and time < '" + ui->dateTimeEdit_2->text() + "'";
+        }
+        cond = true;
+    }
+    if (ui->checkBox_3->isChecked()) {
+        //장소
+        if (cond) {
+            q += "where location like '%" + ui->lineEdit_3->text() + "'";
+        } else {
+            q += "and location like '%" + ui->lineEdit_3->text() + "'";
+        }
+        cond = true;
+    }
+    if (ui->checkBox_4->isChecked()) {
+        //번호
+        if (cond) {
+            q += "where num like '%" + ui->lineEdit_4->text() + "'";
+        } else {
+            q += "and num like '%" + ui->lineEdit_4->text() + "'";
+        }
+        cond = true;
+    }
+    if (ui->checkBox_5->isChecked()) {
+        if (cond) {
+            q += "where division = '" + ui->comboBox->currentText() + "'";
+        } else {
+            q += "and division = '" + ui->comboBox->currentText() + "'";
+        }
+        cond = true;
+    }
+    DBManage::Instance()->searchCrackdownInfo(q);
 }
 
 
