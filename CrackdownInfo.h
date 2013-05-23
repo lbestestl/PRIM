@@ -20,10 +20,7 @@ public:
     QString num;
     QString time;
     QString location;
-    QString img1;
-    QString img2;
-    QString img3;
-    QString img4;
+    QString img[4];
     QString division;
 };
 

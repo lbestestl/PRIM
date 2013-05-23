@@ -34,10 +34,10 @@ private:
     QVector<QPushButton*> folderSelectionButton;
     QVector<QPushButton*> fileSelectionButton;
     QVector<QLineEdit*> folderPathLine;
-    QVector<QLabel*> imgLable;
+    QVector<QLabel*> imgLabel;
     QVector<QTableWidgetItem*> infoCell;
-    std::vector<CrackdownInfo*> info;
-
+//    std::vector<CrackdownInfo*> info;
+    CrackdownInfo info;
 
 private slots:
     void registerData();

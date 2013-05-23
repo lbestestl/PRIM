@@ -52,39 +52,74 @@ DBManage* DBManage::Instance()
 void DBManage::addCrackdownInfo(CrackdownInfo* data)
 {
     QSqlQuery query(db);
-    QString q = "insert into crackdownInfo values(NULL, '" + data->num + "', '" + data->location + "', '" + data->time + "', '" + data->img1 + "', '" + data->img2 + "', '" + data->img3 + "', '" + data->img4 + "', '" + data->division + "')";
-    query.exec(q);
+//    QString q = "insert into crackdownInfo values(NULL, '" + data->num + "', '" + data->location + "', '" + data->time + "', '" + data->img[0] + "', '" + data->img[1] + "', '" + data->img[2] + "', '" + data->img[3] + "', '" + data->division + "')";
+//    query.exec(q);
+    query.prepare("insert into crackdowninfo values (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
+    query.addBindValue(data->num);
+    query.addBindValue(data->location);
+    query.addBindValue(data->time);
+    query.addBindValue(data->img[0]);
+    query.addBindValue(data->img[1]);
+    query.addBindValue(data->img[2]);
+    query.addBindValue(data->img[3]);
+    query.addBindValue(data->division);
+    query.exec();
 }
 
 
 void DBManage::dropCrackdownInfo(int id)
 {
     QSqlQuery query(db);
-    QString q = "delete from crackdownInfo where id = " + QString::number(id);
-    query.exec(q);
+    query.prepare("delete from crackdowninfo where id = ?");
+    query.addBindValue(id);
+    query.exec();
+//    QString q = "delete from crackdowninfo where id = " + QString::number(id);
+//    query.exec(q);
 }
 
 
 void DBManage::modifyCrackdownInfo(CrackdownInfo* data)
 {
     QSqlQuery query(db);
-    query.prepare("update crackdownInfo set num = ?, set location = ?, set time = ?, set img1 = ?, set img2 = ?, set img3 = ?, set img4 =?, set division = ? where id = ?");
+    query.prepare("update crackdowninfo set num = ?, location = ?, time = ?, img1 = ?, img2 = ?, img3 = ?, img4 =?, division = ? where id = ?");
     query.addBindValue(data->num);
     query.addBindValue(data->location);
     query.addBindValue(data->time);
-    query.addBindValue(data->img1);
-    query.addBindValue(data->img2);
-    query.addBindValue(data->img3);
-    query.addBindValue(data->img4);
+    query.addBindValue(data->img[0]);
+    query.addBindValue(data->img[1]);
+    query.addBindValue(data->img[2]);
+    query.addBindValue(data->img[3]);
     query.addBindValue(data->division);
     query.addBindValue(data->id);
     query.exec();
 }
 
 
-CrackdownInfo* DBManage::searchCrackdownInfo(QString q)
+CrackdownInfo DBManage::searchCrackdownInfo(QString q)
 {
     QSqlQuery query(db);
     query.exec(q);
-    return NULL;
+    CrackdownInfo ci;
+    return ci;
+}
+
+
+CrackdownInfo DBManage::temp(int id)
+{
+
+    QString q = "select * from crackdowninfo where id = " + QString::number(id);
+    QSqlQuery query(q, db);
+    CrackdownInfo ci;
+    ci.id = id;
+    if (query.next()) {
+        ci.num = query.value(query.record().indexOf("num")).toString();
+        ci.location = query.value(query.record().indexOf("location")).toString();
+        ci.time = query.value(query.record().indexOf("time")).toString();
+        ci.img[0] = query.value(query.record().indexOf("img1")).toString();
+        ci.img[1] = query.value(query.record().indexOf("img2")).toString();
+        ci.img[2] = query.value(query.record().indexOf("img3")).toString();
+        ci.img[3] = query.value(query.record().indexOf("img4")).toString();
+        ci.division = query.value(query.record().indexOf("division")).toString();
+    }
+    return ci;
 }

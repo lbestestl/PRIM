@@ -43,10 +43,10 @@ void MainWindow::compilingWidegts()
     folderPathLine.push_back(ui->lineEdit_7);
     folderPathLine.push_back(ui->lineEdit_8);
 
-    imgLable.push_back(ui->label);
-    imgLable.push_back(ui->label_2);
-    imgLable.push_back(ui->label_3);
-    imgLable.push_back(ui->label_4);
+    imgLabel.push_back(ui->label);
+    imgLabel.push_back(ui->label_2);
+    imgLabel.push_back(ui->label_3);
+    imgLabel.push_back(ui->label_4);
 }
 
 void MainWindow::connectWidgets()
@@ -71,7 +71,7 @@ void MainWindow::connectWidgets()
         sigMapFolder->setMapping(folderSelectionButton[i], i);
     }
     connect(sigMapFolder, SIGNAL(mapped(int)), this, SLOT(selectFolder(int)));
-    connect(ui->tableView, SIGNAL(selectionChanged(const QItemSelection & )), this, SLOT(tableSelectionChanged()));
+    connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection & )), this, SLOT(tableSelectionChanged()));
 
 }
 
@@ -94,12 +94,12 @@ void MainWindow::initWidgets()
     ui->spinBox_2->setValue(UserSettings::Instance()->searchEndId);
 
     ui->tableView->setModel(&DBManage::Instance()->dbq);
-    ui->tableView->setColumnWidth(0, 70);
+/*    ui->tableView->setColumnWidth(0, 70);
     ui->tableView->setColumnWidth(1, 100);
     ui->tableView->setColumnWidth(2, 220);
     ui->tableView->setColumnWidth(3, 160);
     ui->tableView->setColumnWidth(4, 120);
-    ui->tableView->show();
+    ui->tableView->show();*/ //not working
 
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
@@ -109,13 +109,13 @@ void MainWindow::registerData()
 {
 
     CrackdownInfo *data = new CrackdownInfo();
-    data->num = "11가1234";
-    data->time = "2013-02-07 15:59:23";
+    data->num = "21가1234";
+    data->time = "2013-03-07 14:29:43";
     data->location = "apple street";
-    data->img1 = "/home/lbestestl/Pictures/move/export_img/A.jpg";
-    data->img2 = "/home/lbestestl/Pictures/move/export_img/B.jpg";
-    data->img3 = "/home/lbestestl/Pictures/move/export_img/C.jpg";
-    data->img4 = "/home/lbestestl/Pictures/move/export_img/D.jpg";
+    data->img[0] = "/home/lbestestl/Pictures/move/export_img/A.jpg";
+    data->img[1] = "/home/lbestestl/Pictures/move/export_img/B.jpg";
+    data->img[2] = "/home/lbestestl/Pictures/move/export_img/C.jpg";
+    data->img[3] = "/home/lbestestl/Pictures/move/export_img/D.jpg";//dummy data
 
     DBManage::Instance()->addCrackdownInfo(data);
     delete data;
@@ -171,20 +171,19 @@ void MainWindow::searchData()
         }
         cond = true;
     }
-    ui->label_23->setText(q);
+
     DBManage::Instance()->dbq.setQuery(q);
-
-
     DBManage::Instance()->searchCrackdownInfo(q);
-
-    ui->tableView->setSortingEnabled(true);
     ui->tableView->show();
 }
 
 
 void MainWindow::modifyData()
 {
-
+    info.num = ui->lineEdit->text();
+    info.location = ui->lineEdit_2->text();
+    info.time = ui->dateTimeEdit_3->text();
+    DBManage::Instance()->modifyCrackdownInfo(&info);
 }
 
 
@@ -202,7 +201,9 @@ void MainWindow::deleteData()
 
 void MainWindow::determineData()
 {
-
+    QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
+    int r = indexes.at(0).row();
+    int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
 }
 
 
@@ -229,7 +230,8 @@ void MainWindow::option()
 void MainWindow::selectFile(int index)
 {
     QString fileName = QFileDialog::getOpenFileName(this);
-    imgLable[index]->setPixmap(QPixmap(fileName));
+    info.img[index] = fileName;
+    imgLabel[index]->setPixmap(QPixmap(fileName));
 }
 
 
@@ -245,15 +247,15 @@ void MainWindow::selectFolder(int index)
 
 void MainWindow::tableSelectionChanged()
 {
-    ui->tableView->currentIndex();
-    int row = 0;
-    if (row >= 0) {
-//        ui->lineEdit->setText(ui->tableView->item(row, 1)->text());
-//        ui->lineEdit_2->setText(ui->tableView->item(row, 3)->text());
-//        ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(ui->tableView->item(row, 2)->text(), "yyyy-MM-dd hh:mm:ss"));
-        imgLable[0]->setPixmap(QPixmap(info[row]->img1));
-        imgLable[1]->setPixmap(QPixmap(info[row]->img2));
-        imgLable[2]->setPixmap(QPixmap(info[row]->img3));
-        imgLable[3]->setPixmap(QPixmap(info[row]->img4));
-    }
+    QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
+    int r = indexes.at(0).row();
+    int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
+    info = DBManage::Instance()->temp(id);
+    ui->lineEdit->setText(info.num);
+    ui->lineEdit_2->setText(info.location);
+    ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(info.time, "yyyy-MM-dd hh:mm:ss"));
+    imgLabel[0]->setPixmap(QPixmap(info.img[0]));
+    imgLabel[1]->setPixmap(QPixmap(info.img[1]));
+    imgLabel[2]->setPixmap(QPixmap(info.img[2]));
+    imgLabel[3]->setPixmap(QPixmap(info.img[3]));
 }

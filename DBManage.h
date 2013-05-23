@@ -21,7 +21,8 @@ public:
     void addCrackdownInfo(CrackdownInfo*);
     void dropCrackdownInfo(int id);
     void modifyCrackdownInfo(CrackdownInfo*);
-    CrackdownInfo* searchCrackdownInfo(QString);
+    CrackdownInfo searchCrackdownInfo(QString);
+    CrackdownInfo temp(int id);
     QSqlDatabase db;
     QSqlQueryModel dbq;
 
@@ -30,7 +31,6 @@ private:
     ~DBManage();
 
     static DBManage* instance;
-
 };
 
 
