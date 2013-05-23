@@ -112,14 +112,14 @@ void MainWindow::registerData()
     data->num = "21가1234";
     data->time = "2013-03-07 14:29:43";
     data->location = "apple street";
-    data->img[0] = "/home/lbestestl/Pictures/move/export_img/A.jpg";
-    data->img[1] = "/home/lbestestl/Pictures/move/export_img/B.jpg";
-    data->img[2] = "/home/lbestestl/Pictures/move/export_img/C.jpg";
-    data->img[3] = "/home/lbestestl/Pictures/move/export_img/D.jpg";//dummy data
+    data->img[0] = "A.jpg";
+    data->img[1] = "B.jpg";
+    data->img[2] = "C.jpg";
+    data->img[3] = "D.jpg";//dummy data
+    data->division = "";
 
     DBManage::Instance()->addCrackdownInfo(data);
     delete data;
-
 }
 
 
@@ -184,6 +184,7 @@ void MainWindow::modifyData()
     info.location = ui->lineEdit_2->text();
     info.time = ui->dateTimeEdit_3->text();
     DBManage::Instance()->modifyCrackdownInfo(&info);
+    searchData();
 }
 
 

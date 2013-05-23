@@ -9,6 +9,7 @@
 
 #include <QErrorMessage>
 #include <QSqlQuery>
+#include <QtDebug>
 
 
 DBManage::DBManage()
@@ -25,7 +26,7 @@ DBManage::DBManage()
     if (!db.tables().contains("crackdowninfo")) {
         //copy default.sqlite -> crackdowndb.sqlite
         QSqlQuery query(db);
-        query.prepare("CREATE TABLE \"crackdownInfo\" ( \"id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \"num\" TEXT NOT NULL, \"location\" TEXT NOT NULL, \"time\" TEXT NOT NULL, \"img1\" TEXT, \"img2\" TEXT, \"img3\" TEXT, \"img4\" TEXT, \"division\" TEXT NOT NULL)");
+        query.prepare("CREATE TABLE \"crackdowninfo\" ( \"id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \"num\" TEXT NOT NULL, \"location\" TEXT NOT NULL, \"time\" TEXT NOT NULL, \"img1\" TEXT, \"img2\" TEXT, \"img3\" TEXT, \"img4\" TEXT, \"division\" TEXT NOT NULL)");
         query.exec();
     }
 
@@ -52,18 +53,18 @@ DBManage* DBManage::Instance()
 void DBManage::addCrackdownInfo(CrackdownInfo* data)
 {
     QSqlQuery query(db);
-//    QString q = "insert into crackdownInfo values(NULL, '" + data->num + "', '" + data->location + "', '" + data->time + "', '" + data->img[0] + "', '" + data->img[1] + "', '" + data->img[2] + "', '" + data->img[3] + "', '" + data->division + "')";
-//    query.exec(q);
-    query.prepare("insert into crackdowninfo values (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
-    query.addBindValue(data->num);
-    query.addBindValue(data->location);
-    query.addBindValue(data->time);
-    query.addBindValue(data->img[0]);
-    query.addBindValue(data->img[1]);
-    query.addBindValue(data->img[2]);
-    query.addBindValue(data->img[3]);
-    query.addBindValue(data->division);
-    query.exec();
+    if (data != NULL) {
+        query.prepare("insert into crackdowninfo values (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
+        query.addBindValue(data->num);
+        query.addBindValue(data->location);
+        query.addBindValue(data->time);
+        query.addBindValue(data->img[0]);
+        query.addBindValue(data->img[1]);
+        query.addBindValue(data->img[2]);
+        query.addBindValue(data->img[3]);
+        query.addBindValue(data->division);
+        query.exec();
+    }
 }
 
 
@@ -73,8 +74,6 @@ void DBManage::dropCrackdownInfo(int id)
     query.prepare("delete from crackdowninfo where id = ?");
     query.addBindValue(id);
     query.exec();
-//    QString q = "delete from crackdowninfo where id = " + QString::number(id);
-//    query.exec(q);
 }
 
 
