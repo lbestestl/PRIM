@@ -11,6 +11,7 @@
 
 #include "CrackdownInfo.h"
 #include <QtSql/QtSql>
+#include <QString>
 
 
 class DBManage
@@ -22,7 +23,8 @@ public:
     void dropCrackdownInfo(int id);
     void modifyCrackdownInfo(CrackdownInfo*);
     CrackdownInfo searchCrackdownInfo(QString);
-    CrackdownInfo temp(int id);
+    CrackdownInfo searchCrackdownInfo(int id);
+    CrackdownInfo searchCrackdownInfo(bool, int, int, bool, QString, bool, QString, bool, QString, QString, bool, QString);
     QSqlDatabase db;
     QSqlQueryModel dbq;
 

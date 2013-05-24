@@ -125,55 +125,56 @@ void MainWindow::registerData()
 
 void MainWindow::searchData()
 {
-    bool cond = false;
+    bool condExist = false;
     QString q = "Select id, num, location, time, division from crackdowninfo";
     if (ui->checkBox->isChecked()) {
         //순번
-        if (!cond) {
+        if (!condExist) {
             q += " where id >= " + QString::number(ui->spinBox->value()) + " and id <= " + QString::number(ui->spinBox_2->value());
         } else {
             q += " and id >= " + QString::number(ui->spinBox->value()) + " and id <= " + QString::number(ui->spinBox_2->value());
         }
-        cond = true;
+        condExist = true;
     }
     if (ui->checkBox_2->isChecked()) {
         //시간
-        if (!cond) {
+        if (!condExist) {
             q += " where time >= '" + ui->dateTimeEdit->text() + "' and time <= '" + ui->dateTimeEdit_2->text() + "'";
         } else {
             q += " and time >= '" + ui->dateTimeEdit->text() + "' and time <= '" + ui->dateTimeEdit_2->text() + "'";
         }
-        cond = true;
+        condExist = true;
     }
     if (ui->checkBox_3->isChecked()) {
         //장소
-        if (!cond) {
+        if (!condExist) {
             q += " where location like '%" + ui->lineEdit_3->text() + "%'";
         } else {
             q += " and location like '%" + ui->lineEdit_3->text() + "%'";
         }
-        cond = true;
+        condExist = true;
     }
     if (ui->checkBox_4->isChecked()) {
         //번호
-        if (!cond) {
+        if (!condExist) {
             q += " where num like '%" + ui->lineEdit_4->text() + "%'";
         } else {
             q += " and num like '%" + ui->lineEdit_4->text() + "%'";
         }
-        cond = true;
+        condExist = true;
     }
     if (ui->checkBox_5->isChecked()) {
-        if (!cond) {
+        if (!condExist) {
             q += " where division = '" + ui->comboBox->currentText() + "'";
         } else {
             q += " and division = '" + ui->comboBox->currentText() + "'";
         }
-        cond = true;
+        condExist = true;
     }
 
-    DBManage::Instance()->dbq.setQuery(q);
-    DBManage::Instance()->searchCrackdownInfo(q);
+    qDebug()<<q;
+
+    DBManage::Instance()->searchCrackdownInfo(ui->checkBox->isChecked(), ui->spinBox->value(), ui->spinBox_2->value(), ui->checkBox_4->isChecked(), ui->lineEdit_4->text(), ui->checkBox_3->isChecked(), ui->lineEdit_3->text(), ui->checkBox_2->isChecked(), ui->dateTimeEdit->text(), ui->dateTimeEdit_2->text(), ui->checkBox_5->isChecked(), ui->comboBox->currentText());
     ui->tableView->show();
 }
 
@@ -251,7 +252,7 @@ void MainWindow::tableSelectionChanged()
     QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
     int r = indexes.at(0).row();
     int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
-    info = DBManage::Instance()->temp(id);
+    info = DBManage::Instance()->searchCrackdownInfo(id);
     ui->lineEdit->setText(info.num);
     ui->lineEdit_2->setText(info.location);
     ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(info.time, "yyyy-MM-dd hh:mm:ss"));

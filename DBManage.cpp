@@ -52,24 +52,26 @@ DBManage* DBManage::Instance()
 
 void DBManage::addCrackdownInfo(CrackdownInfo* data)
 {
+    if (data == NULL)
+        return;
     QSqlQuery query(db);
-    if (data != NULL) {
-        query.prepare("insert into crackdowninfo values (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
-        query.addBindValue(data->num);
-        query.addBindValue(data->location);
-        query.addBindValue(data->time);
-        query.addBindValue(data->img[0]);
-        query.addBindValue(data->img[1]);
-        query.addBindValue(data->img[2]);
-        query.addBindValue(data->img[3]);
-        query.addBindValue(data->division);
-        query.exec();
-    }
+    query.prepare("insert into crackdowninfo values (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
+    query.addBindValue(data->num);
+    query.addBindValue(data->location);
+    query.addBindValue(data->time);
+    query.addBindValue(data->img[0]);
+    query.addBindValue(data->img[1]);
+    query.addBindValue(data->img[2]);
+    query.addBindValue(data->img[3]);
+    query.addBindValue(data->division);
+    query.exec();
 }
 
 
 void DBManage::dropCrackdownInfo(int id)
 {
+    if (id < 0)
+        return;
     QSqlQuery query(db);
     query.prepare("delete from crackdowninfo where id = ?");
     query.addBindValue(id);
@@ -79,6 +81,8 @@ void DBManage::dropCrackdownInfo(int id)
 
 void DBManage::modifyCrackdownInfo(CrackdownInfo* data)
 {
+    if (data == NULL)
+        return;
     QSqlQuery query(db);
     query.prepare("update crackdowninfo set num = ?, location = ?, time = ?, img1 = ?, img2 = ?, img3 = ?, img4 =?, division = ? where id = ?");
     query.addBindValue(data->num);
@@ -98,12 +102,13 @@ CrackdownInfo DBManage::searchCrackdownInfo(QString q)
 {
     QSqlQuery query(db);
     query.exec(q);
+    dbq.setQuery(q);
     CrackdownInfo ci;
     return ci;
 }
 
 
-CrackdownInfo DBManage::temp(int id)
+CrackdownInfo DBManage::searchCrackdownInfo(int id)
 {
 
     QString q = "select * from crackdowninfo where id = " + QString::number(id);
@@ -121,4 +126,55 @@ CrackdownInfo DBManage::temp(int id)
         ci.division = query.value(query.record().indexOf("division")).toString();
     }
     return ci;
+}
+
+
+CrackdownInfo DBManage::searchCrackdownInfo(bool idCond, int startId, int endId, bool numCond, QString num, bool locationCond, QString location, bool timeCond, QString startTime, QString endTime, bool divisionCond, QString division)
+{
+    bool condExist = false;
+    QSqlQuery query(db);
+
+    QString q = "Select id, num, location, time, division from crackdowninfo";
+    if (idCond) {
+        if (condExist) {
+            q += " and id >= " + QString::number(startId) + " and id <= " + QString::number(endId);
+        } else {
+            q += " where id >= " + QString::number(startId) + " and id <= " + QString::number(endId);
+        }
+        condExist = true;
+    }
+    if (numCond) {
+        if (condExist) {
+            q += " and num like '%" + num + "%'";
+        } else {
+            q += " where num like '%" + num + "%'";
+        }
+        condExist = true;
+    }
+    if (locationCond) {
+        if (condExist) {
+            q += " and location like '%" + location + "%'";
+        } else {
+            q += " where location like '%" + location + "%'";
+        }
+        condExist = true;
+    }
+    if (timeCond) {
+        if (condExist) {
+            q += " and time >= '" + startTime + "' and time <= '" + endTime + "'";
+        } else {
+            q += " where time >= '" + startTime + "' and time <= '" + endTime + "'";
+        }
+        condExist = true;
+    }
+    if (divisionCond) {
+        if (condExist) {
+            q += " and division = '" + division + "'";
+        } else {
+            q += " where division = '" + division + "'";
+        }
+        condExist = true;
+    }
+    qDebug() << q;
+    query.exec(q);
 }
