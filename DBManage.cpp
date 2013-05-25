@@ -98,17 +98,7 @@ void DBManage::modifyCrackdownInfo(CrackdownInfo* data)
 }
 
 
-CrackdownInfo DBManage::searchCrackdownInfo(QString q)
-{
-    QSqlQuery query(db);
-    query.exec(q);
-    dbq.setQuery(q);
-    CrackdownInfo ci;
-    return ci;
-}
-
-
-CrackdownInfo DBManage::searchCrackdownInfo(int id)
+CrackdownInfo DBManage::getCrackdownInfo(int id)
 {
 
     QString q = "select * from crackdowninfo where id = " + QString::number(id);
@@ -129,12 +119,12 @@ CrackdownInfo DBManage::searchCrackdownInfo(int id)
 }
 
 
-CrackdownInfo DBManage::searchCrackdownInfo(bool idCond, int startId, int endId, bool numCond, QString num, bool locationCond, QString location, bool timeCond, QString startTime, QString endTime, bool divisionCond, QString division)
+void DBManage::searchCrackdownInfo(bool idCond, int startId, int endId, bool numCond, QString num, bool locationCond, QString location, bool timeCond, QString startTime, QString endTime, bool divisionCond, QString division)
 {
     bool condExist = false;
     QSqlQuery query(db);
 
-    QString q = "Select id, num, location, time, division from crackdowninfo";
+    QString q = "select id, num, location, time, division from crackdowninfo";
     if (idCond) {
         if (condExist) {
             q += " and id >= " + QString::number(startId) + " and id <= " + QString::number(endId);
@@ -175,6 +165,7 @@ CrackdownInfo DBManage::searchCrackdownInfo(bool idCond, int startId, int endId,
         }
         condExist = true;
     }
-    qDebug() << q;
-    query.exec(q);
+
+    condExist = query.exec(q);
+    dbq.setQuery(q);
 }

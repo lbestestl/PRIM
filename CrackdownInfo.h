@@ -15,7 +15,6 @@
 class CrackdownInfo
 {
 public:
-//    CrackdownInfo();
     int id;
     QString num;
     QString time;

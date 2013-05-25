@@ -36,7 +36,6 @@ private:
     QVector<QLineEdit*> folderPathLine;
     QVector<QLabel*> imgLabel;
     QVector<QTableWidgetItem*> infoCell;
-//    std::vector<CrackdownInfo*> info;
     CrackdownInfo info;
 
 private slots:

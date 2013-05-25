@@ -74,9 +74,3 @@ void UserSettings::storeToFile() {
             << searchNum;
     }
 }
-
-
-void UserSettings::setImportPath(QString a)
-{
-    importPath = a;
-}

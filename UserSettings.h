@@ -20,8 +20,28 @@ public:
     void storeToFile();
     void setDefault();
 
-    void setImportPath(QString);
+    inline void setImportPath(QString str) {importPath = str;}
+    inline QString getImportPath() {return importPath;}
+    inline void setExportPath(QString str) {exportPath = str;}
+    inline QString getExportPath() {return exportPath;}
+    inline void setWorkspacePath(QString str) {workspacePath = str;}
+    inline QString getWorkspacePath() {return workspacePath;}
+    inline void setBackUpPath(QString str) {backUpPath = str;}
+    inline QString getBackUpPath() {return backUpPath;}
+    inline void setSearchStartId(int val) {searchStartId = val;}
+    inline int getSearchStartId() {return searchStartId;}
+    inline void setSearchEndId(int val) {searchEndId = val;}
+    inline int getSearchEndId() {return searchEndId;}
+    inline void setSearchLocation(QString str) {searchLocation = str;}
+    inline QString getSearchLocation() {return searchLocation;}
+    inline void setSearchNum(QString str) {searchNum = str;}
+    inline QString getSearchNum() {return searchNum;}
 
+private:
+    UserSettings();
+    ~UserSettings();
+
+    static UserSettings* instance;
     QString importPath;
     QString exportPath;
     QString workspacePath;
@@ -31,11 +51,6 @@ public:
     int searchEndId;
     QString searchLocation;
     QString searchNum;
-
-private:
-    UserSettings();
-    ~UserSettings();
-    static UserSettings* instance;
 };
 
 

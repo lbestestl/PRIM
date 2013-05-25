@@ -22,15 +22,17 @@ public:
     void addCrackdownInfo(CrackdownInfo*);
     void dropCrackdownInfo(int id);
     void modifyCrackdownInfo(CrackdownInfo*);
-    CrackdownInfo searchCrackdownInfo(QString);
-    CrackdownInfo searchCrackdownInfo(int id);
-    CrackdownInfo searchCrackdownInfo(bool, int, int, bool, QString, bool, QString, bool, QString, QString, bool, QString);
-    QSqlDatabase db;
-    QSqlQueryModel dbq;
+    CrackdownInfo getCrackdownInfo(int id);
+    void searchCrackdownInfo(bool, int, int, bool, QString, bool, QString, bool, QString, QString, bool, QString);
+
+    inline QSqlQueryModel& getDbq() {return dbq;}
 
 private:
     DBManage();
     ~DBManage();
+
+    QSqlDatabase db;
+    QSqlQueryModel dbq;
 
     static DBManage* instance;
 };

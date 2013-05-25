@@ -82,18 +82,18 @@ void MainWindow::initWidgets()
     ui->dateTimeEdit_2->setDate(QDate::currentDate());
     ui->dateTimeEdit_3->setDateTime(QDateTime::currentDateTime());
 
-    ui->lineEdit_5->setText(UserSettings::Instance()->importPath);
-    ui->lineEdit_6->setText(UserSettings::Instance()->workspacePath);
-    ui->lineEdit_7->setText(UserSettings::Instance()->backUpPath);
-    ui->lineEdit_8->setText(UserSettings::Instance()->exportPath);
+    ui->lineEdit_5->setText(UserSettings::Instance()->getImportPath());
+    ui->lineEdit_6->setText(UserSettings::Instance()->getWorkspacePath());
+    ui->lineEdit_7->setText(UserSettings::Instance()->getBackUpPath());
+    ui->lineEdit_8->setText(UserSettings::Instance()->getExportPath());
 
-    ui->lineEdit_3->setText(UserSettings::Instance()->searchLocation);
-    ui->lineEdit_4->setText(UserSettings::Instance()->searchNum);
+    ui->lineEdit_3->setText(UserSettings::Instance()->getSearchLocation());
+    ui->lineEdit_4->setText(UserSettings::Instance()->getSearchNum());
 
-    ui->spinBox->setValue(UserSettings::Instance()->searchStartId);
-    ui->spinBox_2->setValue(UserSettings::Instance()->searchEndId);
+    ui->spinBox->setValue(UserSettings::Instance()->getSearchStartId());
+    ui->spinBox_2->setValue(UserSettings::Instance()->getSearchEndId());
 
-    ui->tableView->setModel(&DBManage::Instance()->dbq);
+    ui->tableView->setModel(&DBManage::Instance()->getDbq());
 /*    ui->tableView->setColumnWidth(0, 70);
     ui->tableView->setColumnWidth(1, 100);
     ui->tableView->setColumnWidth(2, 220);
@@ -125,57 +125,7 @@ void MainWindow::registerData()
 
 void MainWindow::searchData()
 {
-    bool condExist = false;
-    QString q = "Select id, num, location, time, division from crackdowninfo";
-    if (ui->checkBox->isChecked()) {
-        //순번
-        if (!condExist) {
-            q += " where id >= " + QString::number(ui->spinBox->value()) + " and id <= " + QString::number(ui->spinBox_2->value());
-        } else {
-            q += " and id >= " + QString::number(ui->spinBox->value()) + " and id <= " + QString::number(ui->spinBox_2->value());
-        }
-        condExist = true;
-    }
-    if (ui->checkBox_2->isChecked()) {
-        //시간
-        if (!condExist) {
-            q += " where time >= '" + ui->dateTimeEdit->text() + "' and time <= '" + ui->dateTimeEdit_2->text() + "'";
-        } else {
-            q += " and time >= '" + ui->dateTimeEdit->text() + "' and time <= '" + ui->dateTimeEdit_2->text() + "'";
-        }
-        condExist = true;
-    }
-    if (ui->checkBox_3->isChecked()) {
-        //장소
-        if (!condExist) {
-            q += " where location like '%" + ui->lineEdit_3->text() + "%'";
-        } else {
-            q += " and location like '%" + ui->lineEdit_3->text() + "%'";
-        }
-        condExist = true;
-    }
-    if (ui->checkBox_4->isChecked()) {
-        //번호
-        if (!condExist) {
-            q += " where num like '%" + ui->lineEdit_4->text() + "%'";
-        } else {
-            q += " and num like '%" + ui->lineEdit_4->text() + "%'";
-        }
-        condExist = true;
-    }
-    if (ui->checkBox_5->isChecked()) {
-        if (!condExist) {
-            q += " where division = '" + ui->comboBox->currentText() + "'";
-        } else {
-            q += " and division = '" + ui->comboBox->currentText() + "'";
-        }
-        condExist = true;
-    }
-
-    qDebug()<<q;
-
     DBManage::Instance()->searchCrackdownInfo(ui->checkBox->isChecked(), ui->spinBox->value(), ui->spinBox_2->value(), ui->checkBox_4->isChecked(), ui->lineEdit_4->text(), ui->checkBox_3->isChecked(), ui->lineEdit_3->text(), ui->checkBox_2->isChecked(), ui->dateTimeEdit->text(), ui->dateTimeEdit_2->text(), ui->checkBox_5->isChecked(), ui->comboBox->currentText());
-    ui->tableView->show();
 }
 
 
@@ -217,14 +167,14 @@ void MainWindow::excelData()
 
 void MainWindow::option()
 {
-    UserSettings::Instance()->importPath = ui->lineEdit_5->text();
-    UserSettings::Instance()->workspacePath = ui->lineEdit_6->text();
-    UserSettings::Instance()->backUpPath = ui->lineEdit_7->text();
-    UserSettings::Instance()->exportPath = ui->lineEdit_8->text();
-    UserSettings::Instance()->searchStartId = ui->spinBox->value();
-    UserSettings::Instance()->searchEndId = ui->spinBox_2->value();
-    UserSettings::Instance()->searchLocation = ui->lineEdit_3->text();
-    UserSettings::Instance()->searchNum = ui->lineEdit_4->text();
+    UserSettings::Instance()->setImportPath(ui->lineEdit_5->text());
+    UserSettings::Instance()->setWorkspacePath(ui->lineEdit_6->text());
+    UserSettings::Instance()->setBackUpPath(ui->lineEdit_7->text());
+    UserSettings::Instance()->setExportPath(ui->lineEdit_8->text());
+    UserSettings::Instance()->setSearchStartId(ui->spinBox->value());
+    UserSettings::Instance()->setSearchEndId(ui->spinBox_2->value());
+    UserSettings::Instance()->setSearchLocation(ui->lineEdit_3->text());
+    UserSettings::Instance()->setSearchNum(ui->lineEdit_4->text());
     UserSettings::Instance()->storeToFile();
 }
 
@@ -252,7 +202,7 @@ void MainWindow::tableSelectionChanged()
     QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
     int r = indexes.at(0).row();
     int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
-    info = DBManage::Instance()->searchCrackdownInfo(id);
+    info = DBManage::Instance()->getCrackdownInfo(id);
     ui->lineEdit->setText(info.num);
     ui->lineEdit_2->setText(info.location);
     ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(info.time, "yyyy-MM-dd hh:mm:ss"));
