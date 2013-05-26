@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QSignalMapper>
 #include <QIcon>
+#include <QDir>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -113,21 +114,27 @@ void MainWindow::initWidgets()
 
 void MainWindow::registerData()
 {
+    int division
     if (!showPopup("자료들을 등록하시겠습니까?"))
         return;
+    QDir dir;
+    dir.setFilter(QDir::Files | QDir::NoSymLinks);
+    dir.setSorting(QDir::Name);
+    QStringList filters;
+    filters << "*.jpg" << "*.jpeg" << "*.png" << "*.gif";
+    dir.setNameFilters(filters);
+    dir.setPath(UserSettings::Instance()->getImportPath());
 
-    CrackdownInfo *data = new CrackdownInfo();
-    data->num = "21가1234";
-    data->time = "2013-03-07 14:29:43";
-    data->location = "apple street";
-    data->img[0] = "A.jpg";
-    data->img[1] = "B.jpg";
-    data->img[2] = "C.jpg";
-    data->img[3] = "D.jpg";//dummy data
-    data->division = "";
+    QFileInfoList list = dir.entryInfoList();
+    for (int i = 0; i < list.size(); ++i) {
+        QFileInfo fileInfo = list.at(i);
+        fileInfo.fileName().
+    }
 
-    DBManage::Instance()->addCrackdownInfo(data);
-    delete data;
+
+    UserSettings::Instance()->getWorkspacePath();
+
+    //DBManage::Instance()->addCrackdownInfo(data);
     searchData();
 }
 
@@ -140,7 +147,7 @@ void MainWindow::searchData()
 
 void MainWindow::modifyData()
 {
-    if (!showPopup("선택한 자료를 수정하시겠습니까?"))
+    if (!showPopup("수정한 내용을 저장하시겠습니까?"))
         return;
 
     info.num = ui->lineEdit->text();
@@ -156,7 +163,7 @@ void MainWindow::deleteData()
     if (!showPopup("선택한 자료들을 삭제하시겠습니까?"))
         return;
 
-    QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
+    QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
     if (indexes.empty())
         return;
 
@@ -174,15 +181,11 @@ void MainWindow::determineData()
     if (!showPopup("선택한 자료들을 확정하시겠습니까?"))
         return;
 
-    QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
-    if (indexes.empty())
-        return;
-
+    QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
     for (int i = 0; i < indexes.count(); i++) {
         int r = indexes.at(i).row();
         int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
         CrackdownInfo deti = DBManage::Instance()->getCrackdownInfo(id);
-        QFile a(deti.img[0]);
         /*QChar exfile[70];
 
         exfile[0] = deti.time.at(0);
@@ -208,13 +211,29 @@ void MainWindow::determineData()
         exfile[19] = deti.num.at(5);
         exfile[20] = (deti.num.size() > 6)? deti.num.at(6) : ' ';
         exfile[21] = (deti.num.size() > 7)? deti.num.at(7) : ' ';*/
-        //a.copy(deti.time+""+deti.num+"_"+deti.location);
-        QString exfile;
-        exfile += deti.time;
+        /*QString exfile;
+        exfile += QDateTime::fromString(deti.time, "yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");
         exfile += deti.num;
-        exfile.insert(35, deti.location);
-        a.copy(QString(exfile));
+        exfile.insert(26, "00000");
+        exfile.insert(31, deti.location);
+        qDebug() << deti.location.size();
+        qDebug() << deti.location.length();
+        qDebug() << deti.location.
+        exfile.insert(56, "999");
+        exfile.insert(65, "A");
+        exfile.insert(66, ".jpg");
+        a.copy(exfile);*/
     }
+    /*QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
+    if (indexes.empty())
+        return;
+
+    for (int i = 0; i < indexes.count(); i++) {
+        int r = indexes.at(i).row();
+        int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
+        CrackdownInfo deti = DBManage::Instance()->getCrackdownInfo(id);
+        QFile a(deti.img[0]);
+    }*/
 }
 
 
@@ -258,7 +277,7 @@ void MainWindow::selectFolder(int index)
 
 void MainWindow::tableSelectionChanged()
 {
-    QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
+    QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
     if (indexes.empty())
         return;
     int r = indexes.at(0).row();
