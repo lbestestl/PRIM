@@ -9,8 +9,6 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QLabel>
-#include <QTableWidgetItem>
-#include <vector>
 
 
 namespace Ui {
@@ -29,13 +27,13 @@ private:
     void compilingWidegts();
     void connectWidgets();
     void initWidgets();
+    bool showPopup(const QString);
 
     Ui::MainWindow *ui;
     QVector<QPushButton*> folderSelectionButton;
     QVector<QPushButton*> fileSelectionButton;
     QVector<QLineEdit*> folderPathLine;
     QVector<QLabel*> imgLabel;
-    QVector<QTableWidgetItem*> infoCell;
     CrackdownInfo info;
 
 private slots:
