@@ -79,12 +79,77 @@ void DBManage::dropCrackdownInfo(int id)
 }
 
 
+void DBManage::modifyCrackdownInfo(int id, bool numCond, QString num, bool locationCond, QString location, bool timeCond, QString time, bool divisionCond, QString division, bool img1Cond, QString img1, bool img2Cond, QString img2, bool img3Cond, QString img3, bool img4Cond, QString img4)
+{
+    bool condExist = false;;
+    QSqlQuery query(db);
+    QString q = "update crackdowninfo";
+    if (numCond) {
+        if (condExist)
+            q += ", num = '" + num + "'";
+        else
+            q += " set num = '" + num + "'";
+        condExist = true;
+    }
+    if (locationCond) {
+        if (condExist)
+            q += ", location = '" + location + "'";
+        else
+            q += " set location = '" + location + "'";
+        condExist = true;
+    }
+    if (timeCond) {
+        if (condExist)
+            q += ", time = '" + time + "'";
+        else
+            q += " set time = '" + time + "'";
+        condExist = true;
+    }
+    if (divisionCond) {
+        if (condExist)
+            q += ", division = '" + division + "'";
+        else
+            q += " set division = '" + division + "'";
+        condExist = true;
+    }
+    if (img1Cond) {
+        if (condExist)
+            q += ", img1 = '" + img1 + "'";
+        else
+            q += "set img1 = '" + img1 + "'";
+        condExist = true;
+    }
+    if (img2Cond) {
+        if (condExist)
+            q += ", img2 = '" + img2 + "'";
+        else
+            q += "set img2 = '" + img2 + "'";
+        condExist = true;
+    }
+    if (img3Cond) {
+        if (condExist)
+            q += ", img3 = '" + img3 + "'";
+        else
+            q += "set img3 = '" + img3 + "'";
+        condExist = true;
+    }
+    if (img4Cond) {
+        if (condExist)
+            q += ", img4 = '" + img4 + "'";
+        else
+            q += "set img4 = '" + img4 + "'";
+        condExist = true;
+    }
+    q += " where id = '" + QString::number(id) + "'";
+    query.exec(q);
+}
+
 void DBManage::modifyCrackdownInfo(CrackdownInfo* data)
 {
     if (data == NULL)
         return;
     QSqlQuery query(db);
-    query.prepare("update crackdowninfo set num = ?, location = ?, time = ?, img1 = ?, img2 = ?, img3 = ?, img4 =?, division = ? where id = ?");
+    query.prepare("update crackdowninfo set num = ?, location = ?, time = ?, img1 = ?, img2 = ?, img3 = ?, img4 = ?, division = ? where id = ?");
     query.addBindValue(data->num);
     query.addBindValue(data->location);
     query.addBindValue(data->time);
@@ -165,7 +230,6 @@ void DBManage::searchCrackdownInfo(bool idCond, int startId, int endId, bool num
         }
         condExist = true;
     }
-
     condExist = query.exec(q);
     dbq.setQuery(q);
 }

@@ -74,7 +74,6 @@ void MainWindow::connectWidgets()
     }
     connect(sigMapFolder, SIGNAL(mapped(int)), this, SLOT(selectFolder(int)));
     connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection & )), this, SLOT(tableSelectionChanged()));
-
 }
 
 
@@ -101,21 +100,13 @@ void MainWindow::initWidgets()
     ui->spinBox_2->setValue(UserSettings::Instance()->getSearchEndId());
 
     ui->tableView->setModel(&DBManage::Instance()->getDbq());
-/*    ui->tableView->setColumnWidth(0, 70);
-    ui->tableView->setColumnWidth(1, 100);
-    ui->tableView->setColumnWidth(2, 220);
-    ui->tableView->setColumnWidth(3, 160);
-    ui->tableView->setColumnWidth(4, 120);
-    ui->tableView->show();*/ //not working
-
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 
 void MainWindow::registerData()
 {
-    int division
-    if (!showPopup("자료들을 등록하시겠습니까?"))
+    if (!showPopup("자료를 등록하시겠습니까?"))
         return;
     QDir dir;
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
@@ -128,11 +119,9 @@ void MainWindow::registerData()
     QFileInfoList list = dir.entryInfoList();
     for (int i = 0; i < list.size(); ++i) {
         QFileInfo fileInfo = list.at(i);
-        fileInfo.fileName().
+        QFile f(fileInfo.filePath());
+        f.copy(UserSettings::Instance()->getWorkspacePath() + "/" +fileInfo.fileName());
     }
-
-
-    UserSettings::Instance()->getWorkspacePath();
 
     //DBManage::Instance()->addCrackdownInfo(data);
     searchData();
@@ -142,25 +131,41 @@ void MainWindow::registerData()
 void MainWindow::searchData()
 {
     DBManage::Instance()->searchCrackdownInfo(ui->checkBox->isChecked(), ui->spinBox->value(), ui->spinBox_2->value(), ui->checkBox_4->isChecked(), ui->lineEdit_4->text(), ui->checkBox_3->isChecked(), ui->lineEdit_3->text(), ui->checkBox_2->isChecked(), ui->dateTimeEdit->text(), ui->dateTimeEdit_2->text(), ui->checkBox_5->isChecked(), ui->comboBox->currentText());
+    ui->tableView->setColumnWidth(0, 70);
+    ui->tableView->setColumnWidth(1, 110);
+    ui->tableView->setColumnWidth(2, 220);
+    ui->tableView->setColumnWidth(3, 160);
+    ui->tableView->setColumnWidth(4, 120);
 }
 
 
 void MainWindow::modifyData()
 {
-    if (!showPopup("수정한 내용을 저장하시겠습니까?"))
+    if (!showPopup("선택한 자료를 수정하시겠습니까?"))
         return;
 
-    info.num = ui->lineEdit->text();
-    info.location = ui->lineEdit_2->text();
-    info.time = ui->dateTimeEdit_3->text();
-    DBManage::Instance()->modifyCrackdownInfo(&info);
+    QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
+    if (indexes.empty()) {
+        return;
+    } else if (indexes.count() == 1) {
+        int id = ui->tableView->model()->data(ui->tableView->model()->index(0, 0)).toInt();
+        DBManage::Instance()->modifyCrackdownInfo(id, ui->checkBox_6->isChecked(), ui->lineEdit->text(), ui->checkBox_7->isChecked(), ui->lineEdit_2->text(), ui->checkBox_8->isChecked(), ui->dateTimeEdit_3->text(), ui->checkBox_9->isChecked(), ui->comboBox_3->currentText(), ui->checkBox_10->isChecked(), info.img[0], ui->checkBox_11->isChecked(), info.img[1], ui->checkBox_12->isChecked(), info.img[2], ui->checkBox_13->isChecked(), info.img[3]);
+    } else {
+        for (int i = 0; i < indexes.count(); i++) {
+            int r = indexes.at(i).row();
+            int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
+            QString dt = ui->dateTimeEdit_3->date().toString("yyyy-MM-dd");
+            dt += " " + QDateTime::fromString(DBManage::Instance()->getCrackdownInfo(id).time, "yyyy-MM-dd hh:mm:ss").time().toString("hh:mm:ss");
+            DBManage::Instance()->modifyCrackdownInfo(id, ui->checkBox_6->isChecked(), ui->lineEdit->text(), ui->checkBox_7->isChecked(), ui->lineEdit_2->text(), ui->checkBox_8->isChecked(), dt, ui->checkBox_9->isChecked(), ui->comboBox_3->currentText(), ui->checkBox_10->isChecked(), info.img[0], ui->checkBox_11->isChecked(), info.img[1], ui->checkBox_12->isChecked(), info.img[2], ui->checkBox_13->isChecked(), info.img[3]);
+        }
+    }
     searchData();
 }
 
 
 void MainWindow::deleteData()
 {
-    if (!showPopup("선택한 자료들을 삭제하시겠습니까?"))
+    if (!showPopup("선택한 자료를 삭제하시겠습니까?"))
         return;
 
     QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
@@ -178,7 +183,7 @@ void MainWindow::deleteData()
 
 void MainWindow::determineData()
 {
-    if (!showPopup("선택한 자료들을 확정하시겠습니까?"))
+    if (!showPopup("선택한 자료를 확정하시겠습니까?"))
         return;
 
     QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
@@ -261,16 +266,14 @@ void MainWindow::selectFile(int index)
 {
     QString fileName = QFileDialog::getOpenFileName(this);
     info.img[index] = fileName;
+
     imgLabel[index]->setPixmap(QPixmap(fileName));
 }
 
 
 void MainWindow::selectFolder(int index)
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                "/",
-                                                QFileDialog::ShowDirsOnly
-                                                | QFileDialog::DontResolveSymlinks);
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     folderPathLine[index]->setText(dir);
 }
 
@@ -278,18 +281,41 @@ void MainWindow::selectFolder(int index)
 void MainWindow::tableSelectionChanged()
 {
     QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
-    if (indexes.empty())
+    if (indexes.empty()) {
         return;
-    int r = indexes.at(0).row();
-    int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
-    info = DBManage::Instance()->getCrackdownInfo(id);
-    ui->lineEdit->setText(info.num);
-    ui->lineEdit_2->setText(info.location);
-    ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(info.time, "yyyy-MM-dd hh:mm:ss"));
-    imgLabel[0]->setPixmap(QPixmap(info.img[0]));
-    imgLabel[1]->setPixmap(QPixmap(info.img[1]));
-    imgLabel[2]->setPixmap(QPixmap(info.img[2]));
-    imgLabel[3]->setPixmap(QPixmap(info.img[3]));
+    } else if (indexes.count() == 1) {
+        ui->checkBox_10->setHidden(false);
+        ui->checkBox_11->setHidden(false);
+        ui->checkBox_12->setHidden(false);
+        ui->checkBox_13->setHidden(false);
+        ui->dateTimeEdit_3->setDisplayFormat("yyyy-MM-dd hh:mm:ss");
+        int r = indexes.at(0).row();
+        int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
+        info = DBManage::Instance()->getCrackdownInfo(id);
+        ui->lineEdit->setText(info.num);
+        ui->lineEdit_2->setText(info.location);
+        ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(info.time, "yyyy-MM-dd hh:mm:ss"));
+        imgLabel[0]->setPixmap(QPixmap(info.img[0]));
+        imgLabel[1]->setPixmap(QPixmap(info.img[1]));
+        imgLabel[2]->setPixmap(QPixmap(info.img[2]));
+        imgLabel[3]->setPixmap(QPixmap(info.img[3]));
+    } else {
+        ui->checkBox_10->setCheckState(Qt::Unchecked);
+        ui->checkBox_11->setCheckState(Qt::Unchecked);
+        ui->checkBox_12->setCheckState(Qt::Unchecked);
+        ui->checkBox_13->setCheckState(Qt::Unchecked);
+        ui->checkBox_10->setHidden(true);
+        ui->checkBox_11->setHidden(true);
+        ui->checkBox_12->setHidden(true);
+        ui->checkBox_13->setHidden(true);
+        ui->dateTimeEdit_3->setDisplayFormat("yyyy-MM-dd");
+        ui->lineEdit->setText("");
+        ui->lineEdit_2->setText("");
+        imgLabel[0]->setPixmap(QPixmap(""));
+        imgLabel[1]->setPixmap(QPixmap(""));
+        imgLabel[2]->setPixmap(QPixmap(""));
+        imgLabel[3]->setPixmap(QPixmap(""));
+    }
 }
 
 

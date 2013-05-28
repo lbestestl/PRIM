@@ -22,6 +22,7 @@ public:
     void addCrackdownInfo(CrackdownInfo*);
     void dropCrackdownInfo(int id);
     void modifyCrackdownInfo(CrackdownInfo*);
+    void modifyCrackdownInfo(int, bool, QString, bool, QString, bool, QString, bool, QString, bool, QString, bool, QString, bool, QString, bool, QString);
     CrackdownInfo getCrackdownInfo(int id);
     void searchCrackdownInfo(bool, int, int, bool, QString, bool, QString, bool, QString, QString, bool, QString);
 
