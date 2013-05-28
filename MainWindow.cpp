@@ -74,6 +74,7 @@ void MainWindow::connectWidgets()
     }
     connect(sigMapFolder, SIGNAL(mapped(int)), this, SLOT(selectFolder(int)));
     connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection & )), this, SLOT(tableSelectionChanged()));
+
 }
 
 
@@ -289,6 +290,7 @@ void MainWindow::tableSelectionChanged()
         ui->checkBox_12->setHidden(false);
         ui->checkBox_13->setHidden(false);
         ui->dateTimeEdit_3->setDisplayFormat("yyyy-MM-dd hh:mm:ss");
+
         int r = indexes.at(0).row();
         int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
         info = DBManage::Instance()->getCrackdownInfo(id);
@@ -308,6 +310,7 @@ void MainWindow::tableSelectionChanged()
         ui->checkBox_11->setHidden(true);
         ui->checkBox_12->setHidden(true);
         ui->checkBox_13->setHidden(true);
+
         ui->dateTimeEdit_3->setDisplayFormat("yyyy-MM-dd");
         ui->lineEdit->setText("");
         ui->lineEdit_2->setText("");
@@ -319,7 +322,14 @@ void MainWindow::tableSelectionChanged()
 }
 
 
-bool MainWindow::showPopup(const QString str) {
+void MainWindow::tableHorizontalzHeaderClicked()
+{
+//    qDebug() << m.column();
+}
+
+
+bool MainWindow::showPopup(const QString str)
+{
     Dialog d;
     d.setLabel(str);
     return (d.exec() != 0);

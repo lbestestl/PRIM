@@ -47,6 +47,7 @@ private slots:
     void selectFile(int index);
     void selectFolder(int index);
     void tableSelectionChanged();
+    void tableHorizontalzHeaderClicked();
 };
 
 

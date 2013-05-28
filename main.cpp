@@ -3,12 +3,20 @@
 #include "DBManage.h"
 
 #include <QApplication>
-#include "mcheck.h"
+#include <QSharedData>
+#include <QErrorMessage>
 
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QSharedMemory shared("01adf13gmnwe2hj5qhxc");
+    if (!shared.create(512, QSharedMemory::ReadWrite)) {
+        QErrorMessage em;
+        em.showMessage(QString::fromStdString("프로그램이 실행 중입니다"));
+        em.exec();
+        exit(0);
+    }
     MainWindow w;
     w.show();
     
