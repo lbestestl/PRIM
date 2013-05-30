@@ -74,7 +74,7 @@ void MainWindow::connectWidgets()
     }
     connect(sigMapFolder, SIGNAL(mapped(int)), this, SLOT(selectFolder(int)));
     connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection & )), this, SLOT(tableSelectionChanged()));
-
+    connect(ui->tableView->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(tableHorizontalzHeaderClicked(int)));
 }
 
 
@@ -131,7 +131,7 @@ void MainWindow::registerData()
 
 void MainWindow::searchData()
 {
-    DBManage::Instance()->searchCrackdownInfo(ui->checkBox->isChecked(), ui->spinBox->value(), ui->spinBox_2->value(), ui->checkBox_4->isChecked(), ui->lineEdit_4->text(), ui->checkBox_3->isChecked(), ui->lineEdit_3->text(), ui->checkBox_2->isChecked(), ui->dateTimeEdit->text(), ui->dateTimeEdit_2->text(), ui->checkBox_5->isChecked(), ui->comboBox->currentText());
+    DBManage::Instance()->searchCrackdownInfo(ui->checkBox->isChecked(), ui->spinBox->value(), ui->spinBox_2->value(), ui->checkBox_4->isChecked(), ui->lineEdit_4->text(), ui->checkBox_3->isChecked(), ui->lineEdit_3->text(), ui->checkBox_2->isChecked(), ui->dateTimeEdit->text(), ui->dateTimeEdit_2->text(), ui->checkBox_5->isChecked(), ui->comboBox->currentText(), ui->tableView->horizontalHeader()->sortIndicatorSection(), ui->tableView->horizontalHeader()->sortIndicatorOrder());
     ui->tableView->setColumnWidth(0, 70);
     ui->tableView->setColumnWidth(1, 110);
     ui->tableView->setColumnWidth(2, 220);
@@ -322,9 +322,14 @@ void MainWindow::tableSelectionChanged()
 }
 
 
-void MainWindow::tableHorizontalzHeaderClicked()
+void MainWindow::tableHorizontalzHeaderClicked(int i)
 {
-//    qDebug() << m.column();
+    DBManage::Instance()->searchCrackdownInfo(ui->checkBox->isChecked(), ui->spinBox->value(), ui->spinBox_2->value(), ui->checkBox_4->isChecked(), ui->lineEdit_4->text(), ui->checkBox_3->isChecked(), ui->lineEdit_3->text(), ui->checkBox_2->isChecked(), ui->dateTimeEdit->text(), ui->dateTimeEdit_2->text(), ui->checkBox_5->isChecked(), ui->comboBox->currentText(), i, ui->tableView->horizontalHeader()->sortIndicatorOrder());
+    ui->tableView->setColumnWidth(0, 70);
+    ui->tableView->setColumnWidth(1, 110);
+    ui->tableView->setColumnWidth(2, 220);
+    ui->tableView->setColumnWidth(3, 160);
+    ui->tableView->setColumnWidth(4, 120);
 }
 
 

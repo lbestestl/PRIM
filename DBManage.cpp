@@ -144,6 +144,7 @@ void DBManage::modifyCrackdownInfo(int id, bool numCond, QString num, bool locat
     query.exec(q);
 }
 
+
 void DBManage::modifyCrackdownInfo(CrackdownInfo* data)
 {
     if (data == NULL)
@@ -184,7 +185,7 @@ CrackdownInfo DBManage::getCrackdownInfo(int id)
 }
 
 
-void DBManage::searchCrackdownInfo(bool idCond, int startId, int endId, bool numCond, QString num, bool locationCond, QString location, bool timeCond, QString startTime, QString endTime, bool divisionCond, QString division)
+void DBManage::searchCrackdownInfo(bool idCond, int startId, int endId, bool numCond, QString num, bool locationCond, QString location, bool timeCond, QString startTime, QString endTime, bool divisionCond, QString division, int sortIndex, Qt::SortOrder sortOrder)
 {
     bool condExist = false;
     QSqlQuery query(db);
@@ -230,6 +231,18 @@ void DBManage::searchCrackdownInfo(bool idCond, int startId, int endId, bool num
         }
         condExist = true;
     }
+    if (sortIndex == 0)
+        q += " order by id";
+    else if (sortIndex == 1)
+        q += " order by num";
+    else if (sortIndex == 2)
+        q += " order by location";
+    else if (sortIndex == 3)
+        q += " order by time";
+    else
+        q += " order by division";
+    if (sortOrder == Qt::DescendingOrder)
+        q += " desc";
     condExist = query.exec(q);
     dbq.setQuery(q);
 }

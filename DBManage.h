@@ -24,7 +24,7 @@ public:
     void modifyCrackdownInfo(CrackdownInfo*);
     void modifyCrackdownInfo(int, bool, QString, bool, QString, bool, QString, bool, QString, bool, QString, bool, QString, bool, QString, bool, QString);
     CrackdownInfo getCrackdownInfo(int id);
-    void searchCrackdownInfo(bool, int, int, bool, QString, bool, QString, bool, QString, QString, bool, QString);
+    void searchCrackdownInfo(bool, int, int, bool, QString, bool, QString, bool, QString, QString, bool, QString, int, Qt::SortOrder);
 
     inline QSqlQueryModel& getDbq() {return dbq;}
 
