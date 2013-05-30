@@ -9,7 +9,6 @@
 
 #include <QErrorMessage>
 #include <QSqlQuery>
-#include <QtDebug>
 
 
 DBManage::DBManage()
@@ -115,28 +114,28 @@ void DBManage::modifyCrackdownInfo(int id, bool numCond, QString num, bool locat
         if (condExist)
             q += ", img1 = '" + img1 + "'";
         else
-            q += "set img1 = '" + img1 + "'";
+            q += " set img1 = '" + img1 + "'";
         condExist = true;
     }
     if (img2Cond) {
         if (condExist)
             q += ", img2 = '" + img2 + "'";
         else
-            q += "set img2 = '" + img2 + "'";
+            q += " set img2 = '" + img2 + "'";
         condExist = true;
     }
     if (img3Cond) {
         if (condExist)
             q += ", img3 = '" + img3 + "'";
         else
-            q += "set img3 = '" + img3 + "'";
+            q += " set img3 = '" + img3 + "'";
         condExist = true;
     }
     if (img4Cond) {
         if (condExist)
             q += ", img4 = '" + img4 + "'";
         else
-            q += "set img4 = '" + img4 + "'";
+            q += " set img4 = '" + img4 + "'";
         condExist = true;
     }
     q += " where id = '" + QString::number(id) + "'";

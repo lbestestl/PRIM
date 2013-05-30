@@ -10,6 +10,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    //중복 실행 방지
     QSharedMemory shared("01adf13gmnwe2hj5qhxc");
     if (!shared.create(512, QSharedMemory::ReadWrite)) {
         QErrorMessage em;

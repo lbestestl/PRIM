@@ -152,7 +152,8 @@ void MainWindow::modifyData()
     if (indexes.empty()) {
         return;
     } else if (indexes.count() == 1) {
-        int id = ui->tableView->model()->data(ui->tableView->model()->index(0, 0)).toInt();
+        int r = indexes.at(0).row();
+        int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
         DBManage::Instance()->modifyCrackdownInfo(id, ui->checkBox_6->isChecked(), ui->lineEdit->text(), ui->checkBox_7->isChecked(), ui->lineEdit_2->text(), ui->checkBox_8->isChecked(), ui->dateTimeEdit_3->text(), ui->checkBox_9->isChecked(), ui->comboBox_3->currentText(), ui->checkBox_10->isChecked(), info.img[0], ui->checkBox_11->isChecked(), info.img[1], ui->checkBox_12->isChecked(), info.img[2], ui->checkBox_13->isChecked(), info.img[3]);
     } else {
         for (int i = 0; i < indexes.count(); i++) {
@@ -195,6 +196,19 @@ void MainWindow::determineData()
         int r = indexes.at(i).row();
         int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
         CrackdownInfo deti = DBManage::Instance()->getCrackdownInfo(id);
+        QString exfile;
+
+        exfile += QDateTime::fromString(deti.time, "yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");
+        exfile += deti.num;
+        exfile.insert(26, "00000");
+        exfile.insert(31, deti.location);
+        exfile.insert(56, "999");
+        exfile.insert(65, "A");
+        exfile.insert(66, ".jpg");
+        QFile a(deti.img[0]);
+        a.copy(exfile);
+        QTextCodec* codec = QTextCodec::codecForName("EUC-KR");
+        codec->
         /*QChar exfile[70];
 
         exfile[0] = deti.time.at(0);

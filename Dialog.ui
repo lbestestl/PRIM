@@ -31,6 +31,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="locale">
+   <locale language="Korean" country="SouthKorea"/>
+  </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
