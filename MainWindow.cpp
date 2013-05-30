@@ -102,6 +102,8 @@ void MainWindow::initWidgets()
 
     ui->tableView->setModel(&DBManage::Instance()->getDbq());
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    ui->tableView->horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
 }
 
 
@@ -122,6 +124,7 @@ void MainWindow::registerData()
         QFileInfo fileInfo = list.at(i);
         QFile f(fileInfo.filePath());
         f.copy(UserSettings::Instance()->getWorkspacePath() + "/" +fileInfo.fileName());
+        f.remove();
     }
 
     //DBManage::Instance()->addCrackdownInfo(data);

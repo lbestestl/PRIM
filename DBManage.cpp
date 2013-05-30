@@ -24,7 +24,6 @@ DBManage::DBManage()
         exit(0);
     }
     if (!db.tables().contains("crackdowninfo")) {
-        //copy default.sqlite -> crackdowndb.sqlite
         QSqlQuery query(db);
         query.prepare("CREATE TABLE \"crackdowninfo\" ( \"id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \"num\" TEXT NOT NULL, \"location\" TEXT NOT NULL, \"time\" TEXT NOT NULL, \"img1\" TEXT, \"img2\" TEXT, \"img3\" TEXT, \"img4\" TEXT, \"division\" TEXT NOT NULL)");
         query.exec();
@@ -192,43 +191,39 @@ void DBManage::searchCrackdownInfo(bool idCond, int startId, int endId, bool num
 
     QString q = "select id, num, location, time, division from crackdowninfo";
     if (idCond) {
-        if (condExist) {
+        if (condExist)
             q += " and id >= " + QString::number(startId) + " and id <= " + QString::number(endId);
-        } else {
+        else
             q += " where id >= " + QString::number(startId) + " and id <= " + QString::number(endId);
-        }
         condExist = true;
     }
     if (numCond) {
-        if (condExist) {
+        if (condExist)
             q += " and num like '%" + num + "%'";
-        } else {
+        else
             q += " where num like '%" + num + "%'";
-        }
+
         condExist = true;
     }
     if (locationCond) {
-        if (condExist) {
+        if (condExist)
             q += " and location like '%" + location + "%'";
-        } else {
+        else
             q += " where location like '%" + location + "%'";
-        }
         condExist = true;
     }
     if (timeCond) {
-        if (condExist) {
+        if (condExist)
             q += " and time >= '" + startTime + "' and time <= '" + endTime + "'";
-        } else {
+        else
             q += " where time >= '" + startTime + "' and time <= '" + endTime + "'";
-        }
         condExist = true;
     }
     if (divisionCond) {
-        if (condExist) {
+        if (condExist)
             q += " and division = '" + division + "'";
-        } else {
+        else
             q += " where division = '" + division + "'";
-        }
         condExist = true;
     }
     if (sortIndex == 0)

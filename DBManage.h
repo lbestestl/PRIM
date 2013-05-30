@@ -28,11 +28,12 @@ public:
 
     inline QSqlQueryModel& getDbq() {return dbq;}
 
+    QSqlDatabase db;
+
 private:
     DBManage();
     ~DBManage();
 
-    QSqlDatabase db;
     QSqlQueryModel dbq;
 
     static DBManage* instance;
