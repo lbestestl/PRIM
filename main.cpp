@@ -5,10 +5,13 @@
 #include <QApplication>
 #include <QSharedData>
 #include <QErrorMessage>
+#include <QStyle>
+#include <QStyleFactory>
 
 
 int main(int argc, char *argv[])
 {
+    QApplication::setStyle(QStyleFactory::create("fusion"));
     QApplication a(argc, argv);
     //중복 실행 방지
     QSharedMemory shared("01adf13gmnwe2hj5qhxc");

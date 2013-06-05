@@ -80,9 +80,9 @@ void MainWindow::connectWidgets()
 
 void MainWindow::initWidgets()
 {
-    QIcon icon;
-    icon.addFile(QStringLiteral("icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-    this->setWindowIcon(icon);
+    QIcon mainIcon;
+    mainIcon.addFile(QStringLiteral("main_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+    this->setWindowIcon(mainIcon);
     this->setWindowTitle("주정차단속관리 프로그램");
 
     ui->dateTimeEdit->setDate(QDate::currentDate());
@@ -104,6 +104,23 @@ void MainWindow::initWidgets()
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     ui->tableView->horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
+
+    QIcon imageIcon;
+    imageIcon.addFile(QStringLiteral("image_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->pushButton_8->setIcon(imageIcon);
+    ui->pushButton_9->setIcon(imageIcon);
+    ui->pushButton_10->setIcon(imageIcon);
+    ui->pushButton_11->setIcon(imageIcon);
+
+    QIcon arrowUpIcon;
+    arrowUpIcon.addFile(QStringLiteral("arrup_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->pushButton_19->setIcon(arrowUpIcon);
+    QIcon arrowDownIcon;
+    arrowDownIcon.addFile(QStringLiteral("arrdown_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->pushButton_20->setIcon(arrowDownIcon);
+    QIcon paletteIcon;
+    paletteIcon.addFile(QStringLiteral("palette_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->pushButton_21->setIcon(paletteIcon);
 }
 
 
@@ -120,11 +137,14 @@ void MainWindow::registerData()
     dir.setPath(UserSettings::Instance()->getImportPath());
 
     QFileInfoList list = dir.entryInfoList();
-    for (int i = 0; i < list.size(); ++i) {
-        QFileInfo fileInfo = list.at(i);
+    while (!list.empty()) {
+        QFileInfo fileInfo = list.first();
+        list.pop_front();
         QFile f(fileInfo.filePath());
-        f.copy(UserSettings::Instance()->getWorkspacePath() + "/" +fileInfo.fileName());
+        f.copy(UserSettings::Instance()->getWorkspacePath() + QDir::separator() + fileInfo.fileName());
         f.remove();
+        qDebug() << fileInfo.fileName().toLocal8Bit().left(14).trimmed();
+        qDebug() << fileInfo.fileName().toLocal8Bit().mid(26, 22).trimmed();
     }
 
     //DBManage::Instance()->addCrackdownInfo(data);
@@ -150,12 +170,15 @@ void MainWindow::modifyData()
 
     QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
     if (indexes.empty()) {
+        //선택한 자료가 없을 경우
         return;
     } else if (indexes.count() == 1) {
+        //선택한 자료가 1개일 경우
         int r = indexes.at(0).row();
         int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
         DBManage::Instance()->modifyCrackdownInfo(id, ui->checkBox_6->isChecked(), ui->lineEdit->text(), ui->checkBox_7->isChecked(), ui->lineEdit_2->text(), ui->checkBox_8->isChecked(), ui->dateTimeEdit_3->text(), ui->checkBox_9->isChecked(), ui->comboBox_3->currentText(), ui->checkBox_10->isChecked(), info.img[0], ui->checkBox_11->isChecked(), info.img[1], ui->checkBox_12->isChecked(), info.img[2], ui->checkBox_13->isChecked(), info.img[3]);
     } else {
+        //선택한 자료가 복수일 경우 (일시의 경우 날짜만 수정)
         for (int i = 0; i < indexes.count(); i++) {
             int r = indexes.at(i).row();
             int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
@@ -196,8 +219,8 @@ void MainWindow::determineData()
         int r = indexes.at(i).row();
         int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
         CrackdownInfo deti = DBManage::Instance()->getCrackdownInfo(id);
-        QString exfile;
 
+        QByteArray exfile;
         exfile += QDateTime::fromString(deti.time, "yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");
         exfile += deti.num;
         exfile.insert(26, "00000");
@@ -206,9 +229,7 @@ void MainWindow::determineData()
         exfile.insert(65, "A");
         exfile.insert(66, ".jpg");
         QFile a(deti.img[0]);
-        a.copy(exfile);
-        QTextCodec* codec = QTextCodec::codecForName("EUC-KR");
-        codec->
+        a.copy(UserSettings::Instance()->getExportPath() + QDir::separator() + exfile);
         /*QChar exfile[70];
 
         exfile[0] = deti.time.at(0);
@@ -302,6 +323,14 @@ void MainWindow::tableSelectionChanged()
     if (indexes.empty()) {
         return;
     } else if (indexes.count() == 1) {
+        ui->checkBox_6->setCheckState(Qt::Checked);
+        ui->checkBox_7->setCheckState(Qt::Checked);
+        ui->checkBox_8->setCheckState(Qt::Checked);
+        ui->checkBox_9->setCheckState(Qt::Checked);
+        ui->checkBox_6->setChecked(true);
+        ui->checkBox_7->setChecked(true);
+        ui->checkBox_8->setChecked(true);
+        ui->checkBox_9->setChecked(true);
         ui->checkBox_10->setHidden(false);
         ui->checkBox_11->setHidden(false);
         ui->checkBox_12->setHidden(false);
@@ -319,6 +348,14 @@ void MainWindow::tableSelectionChanged()
         imgLabel[2]->setPixmap(QPixmap(info.img[2]));
         imgLabel[3]->setPixmap(QPixmap(info.img[3]));
     } else {
+        ui->checkBox_6->setCheckState(Qt::Unchecked);
+        ui->checkBox_7->setCheckState(Qt::Unchecked);
+        ui->checkBox_8->setCheckState(Qt::Unchecked);
+        ui->checkBox_9->setCheckState(Qt::Unchecked);
+        ui->checkBox_6->setChecked(false);
+        ui->checkBox_7->setChecked(false);
+        ui->checkBox_8->setChecked(false);
+        ui->checkBox_9->setChecked(false);
         ui->checkBox_10->setCheckState(Qt::Unchecked);
         ui->checkBox_11->setCheckState(Qt::Unchecked);
         ui->checkBox_12->setCheckState(Qt::Unchecked);
