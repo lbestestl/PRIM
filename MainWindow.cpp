@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    compilingWidgets();
     initWidgets();
-    compilingWidegts();
     connectWidgets();
 }
 
@@ -28,12 +28,12 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::compilingWidegts()
+void MainWindow::compilingWidgets()
 {
-    fileSelectionButton.push_back(ui->pushButton_8);
-    fileSelectionButton.push_back(ui->pushButton_9);
-    fileSelectionButton.push_back(ui->pushButton_10);
-    fileSelectionButton.push_back(ui->pushButton_11);
+    imageSelectionButton.push_back(ui->pushButton_8);
+    imageSelectionButton.push_back(ui->pushButton_9);
+    imageSelectionButton.push_back(ui->pushButton_10);
+    imageSelectionButton.push_back(ui->pushButton_11);
 
     folderSelectionButton.push_back(ui->pushButton_15);
     folderSelectionButton.push_back(ui->pushButton_16);
@@ -49,6 +49,11 @@ void MainWindow::compilingWidegts()
     imgLabel.push_back(ui->label_2);
     imgLabel.push_back(ui->label_3);
     imgLabel.push_back(ui->label_4);
+
+    mosaicButton.push_back(ui->pushButton_21);
+    mosaicButton.push_back(ui->pushButton_24);
+    mosaicButton.push_back(ui->pushButton_27);
+    mosaicButton.push_back(ui->pushButton_30);
 }
 
 void MainWindow::connectWidgets()
@@ -59,11 +64,11 @@ void MainWindow::connectWidgets()
     connect(ui->pushButton_4, SIGNAL(clicked()), this, SLOT(modifyData()));
     connect(ui->pushButton_5, SIGNAL(clicked()), this, SLOT(deleteData()));
     connect(ui->pushButton_6, SIGNAL(clicked()), this, SLOT(determineData()));
-    connect(ui->pushButton_7, SIGNAL(clicked()), this, SLOT(option()));
+    connect(ui->pushButton_7, SIGNAL(clicked()), this, SLOT(savePreference()));
     QSignalMapper* sigMapFile = new QSignalMapper(this);
-    for (int i = 0; i < fileSelectionButton.size(); ++i) {
-        connect(fileSelectionButton[i], SIGNAL(clicked()), sigMapFile, SLOT(map()));
-        sigMapFile->setMapping(fileSelectionButton[i], i);
+    for (int i = 0; i < imageSelectionButton.size(); ++i) {
+        connect(imageSelectionButton[i], SIGNAL(clicked()), sigMapFile, SLOT(map()));
+        sigMapFile->setMapping(imageSelectionButton[i], i);
     }
     connect(sigMapFile, SIGNAL(mapped(int)), this, SLOT(selectFile(int)));
 
@@ -114,13 +119,16 @@ void MainWindow::initWidgets()
 
     QIcon arrowUpIcon;
     arrowUpIcon.addFile(QStringLiteral("arrup_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-    ui->pushButton_19->setIcon(arrowUpIcon);
+        ui->pushButton_19->setIcon(arrowUpIcon);
+
     QIcon arrowDownIcon;
     arrowDownIcon.addFile(QStringLiteral("arrdown_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
     ui->pushButton_20->setIcon(arrowDownIcon);
+
     QIcon paletteIcon;
     paletteIcon.addFile(QStringLiteral("palette_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-    ui->pushButton_21->setIcon(paletteIcon);
+    for (int i = 0; i < mosaicButton.size(); i++)
+        mosaicButton[i]->setIcon(paletteIcon);
 }
 
 
@@ -287,7 +295,7 @@ void MainWindow::excelData()
 }
 
 
-void MainWindow::option()
+void MainWindow::savePreference()
 {
     UserSettings::Instance()->setImportPath(ui->lineEdit_5->text());
     UserSettings::Instance()->setWorkspacePath(ui->lineEdit_6->text());

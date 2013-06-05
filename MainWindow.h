@@ -24,14 +24,15 @@ public:
     ~MainWindow();
     
 private:
-    void compilingWidegts();
+    void compilingWidgets();
     void connectWidgets();
     void initWidgets();
     bool showPopup(const QString);
 
     Ui::MainWindow *ui;
     QVector<QPushButton*> folderSelectionButton;
-    QVector<QPushButton*> fileSelectionButton;
+    QVector<QPushButton*> imageSelectionButton;
+    QVector<QPushButton*> mosaicButton;
     QVector<QLineEdit*> folderPathLine;
     QVector<QLabel*> imgLabel;
     CrackdownInfo info;
@@ -43,7 +44,7 @@ private slots:
     void deleteData();
     void determineData();
     void excelData();
-    void option();
+    void savePreference();
     void selectFile(int index);
     void selectFolder(int index);
     void tableSelectionChanged();
