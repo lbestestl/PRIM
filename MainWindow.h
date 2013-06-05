@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QLabel>
+#include <QImage>
 
 
 namespace Ui {
@@ -31,8 +32,10 @@ private:
 
     Ui::MainWindow *ui;
     QVector<QPushButton*> folderSelectionButton;
-    QVector<QPushButton*> imageSelectionButton;
-    QVector<QPushButton*> mosaicButton;
+    QVector<QPushButton*> imgLoadButton;
+    QVector<QPushButton*> imgMosaicButton;
+    QVector<QPushButton*> imgBrightButton;
+    QVector<QPushButton*> imgDarkButton;
     QVector<QLineEdit*> folderPathLine;
     QVector<QLabel*> imgLabel;
     CrackdownInfo info;
@@ -45,10 +48,14 @@ private slots:
     void determineData();
     void excelData();
     void savePreference();
-    void selectFile(int index);
-    void selectFolder(int index);
+
+    void selectFile(int);
+    void selectFolder(int);
     void tableSelectionChanged();
     void tableHorizontalzHeaderClicked(int);
+    void mosaicImage(int);
+    void brightImage(int);
+    void darkImage(int);
 };
 
 

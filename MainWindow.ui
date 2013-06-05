@@ -35,7 +35,7 @@
    <locale language="Korean" country="SouthKorea"/>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="img1Label">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -51,7 +51,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="img2Label">
     <property name="geometry">
      <rect>
       <x>600</x>
@@ -67,7 +67,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="img3Label">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -83,7 +83,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="img4Label">
     <property name="geometry">
      <rect>
       <x>600</x>
@@ -99,7 +99,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_5">
+   <widget class="QLabel" name="numLabel">
     <property name="geometry">
      <rect>
       <x>510</x>
@@ -142,13 +142,13 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>4</number>
     </property>
-    <widget class="QWidget" name="widget">
+    <widget class="QWidget" name="registerTab">
      <attribute name="title">
       <string>자료등록</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="registerButton">
       <property name="geometry">
        <rect>
         <x>289</x>
@@ -161,7 +161,7 @@
        <string> 사진등록</string>
       </property>
      </widget>
-     <widget class="QProgressBar" name="progressBar">
+     <widget class="QProgressBar" name="importProgressBar">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -174,7 +174,7 @@
        <number>0</number>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox_2">
+     <widget class="QComboBox" name="registerDivisionComboBox">
       <property name="geometry">
        <rect>
         <x>80</x>
@@ -184,7 +184,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_18">
+     <widget class="QLabel" name="registerDivisionLabel">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -198,11 +198,11 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_3">
+    <widget class="QWidget" name="searchTab">
      <attribute name="title">
       <string>자료검색</string>
      </attribute>
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="searchLocationLineEdit">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -212,7 +212,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_3">
+     <widget class="QCheckBox" name="searchOpLocationCheckBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -234,7 +234,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_4">
+     <widget class="QCheckBox" name="searchOpNumCheckBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -256,7 +256,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QLabel" name="label_12">
+     <widget class="QLabel" name="searchTextLabel_1">
       <property name="geometry">
        <rect>
         <x>190</x>
@@ -272,7 +272,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QSpinBox" name="spinBox_2">
+     <widget class="QSpinBox" name="searchEndIdSpinBox">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -291,7 +291,7 @@
        <number>999999</number>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox">
+     <widget class="QCheckBox" name="searchOpIdCheckBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -313,7 +313,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QDateTimeEdit" name="dateTimeEdit_2">
+     <widget class="QDateTimeEdit" name="searchEndTimeEdit">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -339,7 +339,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="searchDivisionComboBox">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -349,7 +349,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_2">
+     <widget class="QCheckBox" name="searchOpTimeCheckBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -374,7 +374,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="label_8">
+     <widget class="QLabel" name="searchTextLabel_2">
       <property name="geometry">
        <rect>
         <x>80</x>
@@ -390,7 +390,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QSpinBox" name="spinBox">
+     <widget class="QSpinBox" name="searchStartIdSpinBox">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -406,7 +406,7 @@
        <number>9999</number>
       </property>
      </widget>
-     <widget class="QDateTimeEdit" name="dateTimeEdit">
+     <widget class="QDateTimeEdit" name="searchStartTimeEdit">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -422,7 +422,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_4">
+     <widget class="QLineEdit" name="searchNumLineEdit">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -432,7 +432,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_5">
+     <widget class="QCheckBox" name="searchOpDivisionCheckBox">
       <property name="geometry">
        <rect>
         <x>293</x>
@@ -454,7 +454,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="searchButton">
       <property name="geometry">
        <rect>
         <x>310</x>
@@ -471,11 +471,11 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="editTab">
      <attribute name="title">
       <string>자료편집</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="modifyButton">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -485,13 +485,13 @@
        </rect>
       </property>
       <property name="text">
-       <string>[F4] 자료저장</string>
+       <string>[F5] 자료저장</string>
       </property>
       <property name="shortcut">
-       <string>F4</string>
+       <string>F5</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_5">
+     <widget class="QPushButton" name="deleteButton">
       <property name="geometry">
        <rect>
         <x>130</x>
@@ -501,13 +501,13 @@
        </rect>
       </property>
       <property name="text">
-       <string>[F5] 자료삭제</string>
+       <string>[F6] 자료삭제</string>
       </property>
       <property name="shortcut">
-       <string>F5</string>
+       <string>F6</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="editNumLineEdit">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -517,7 +517,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="editLocationLineEdit">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -527,7 +527,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QDateTimeEdit" name="dateTimeEdit_3">
+     <widget class="QDateTimeEdit" name="editTimeEdit">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -543,7 +543,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox_3">
+     <widget class="QComboBox" name="editDivisionComboBox">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -553,7 +553,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_6">
+     <widget class="QCheckBox" name="editOpNumCheckBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -569,7 +569,7 @@
        <string>차량번호</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_7">
+     <widget class="QCheckBox" name="editOpLocationCheckBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -585,7 +585,7 @@
        <string>단속위치</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_8">
+     <widget class="QCheckBox" name="editOpTimeCheckBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -601,7 +601,7 @@
        <string>단속일시</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_9">
+     <widget class="QCheckBox" name="editOpDivisionCheckBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -617,7 +617,7 @@
        <string>편성정보</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_10">
+     <widget class="QCheckBox" name="editOpImg1CheckBox">
       <property name="geometry">
        <rect>
         <x>290</x>
@@ -633,7 +633,7 @@
        <string>사진1변경</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_11">
+     <widget class="QCheckBox" name="editOpImg2CheckBox">
       <property name="geometry">
        <rect>
         <x>290</x>
@@ -649,7 +649,7 @@
        <string>사진2변경</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_12">
+     <widget class="QCheckBox" name="editOpImg3CheckBox">
       <property name="geometry">
        <rect>
         <x>290</x>
@@ -665,7 +665,7 @@
        <string>사진3변경</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_13">
+     <widget class="QCheckBox" name="editOpImg4CheckBox">
       <property name="geometry">
        <rect>
         <x>290</x>
@@ -682,11 +682,11 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_4">
+    <widget class="QWidget" name="determineTab">
      <attribute name="title">
       <string>자료확정</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_6">
+     <widget class="QPushButton" name="determineButton">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -696,36 +696,36 @@
        </rect>
       </property>
       <property name="text">
-       <string>[F6] 단속확정</string>
+       <string>단속확정</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="excelButton">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>70</y>
+        <x>270</x>
+        <y>20</y>
         <width>110</width>
         <height>32</height>
        </rect>
       </property>
       <property name="text">
-       <string>[F7] 엑셀변환</string>
+       <string>엑셀변환</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_12">
+     <widget class="QPushButton" name="duplicationButton">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>120</y>
-        <width>98</width>
+        <x>150</x>
+        <y>20</y>
+        <width>111</width>
         <height>31</height>
        </rect>
       </property>
       <property name="text">
-       <string>PushButton</string>
+       <string>중복확인</string>
       </property>
      </widget>
-     <widget class="QProgressBar" name="progressBar_2">
+     <widget class="QProgressBar" name="exportProgressBar">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -739,11 +739,11 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="preferenceTab">
      <attribute name="title">
       <string>환경설정</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_7">
+     <widget class="QPushButton" name="savePreferenceButton">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -756,7 +756,7 @@
        <string>저장</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_17">
+     <widget class="QLabel" name="importPathLabel">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -769,7 +769,7 @@
        <string>사진등록폴더</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_20">
+     <widget class="QLabel" name="workspacePathLabel">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -782,7 +782,7 @@
        <string>자료작업폴더</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_21">
+     <widget class="QLabel" name="backUpPathLabel">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -795,7 +795,7 @@
        <string>백업파일폴더</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_22">
+     <widget class="QLabel" name="exportPathLabel">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -808,7 +808,7 @@
        <string>자료확정폴더</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_13">
+     <widget class="QPushButton" name="helpButton">
       <property name="geometry">
        <rect>
         <x>180</x>
@@ -821,7 +821,7 @@
        <string>도움말</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_14">
+     <widget class="QPushButton" name="copyrightButton">
       <property name="geometry">
        <rect>
         <x>290</x>
@@ -834,7 +834,7 @@
        <string>프로그램정보</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_5">
+     <widget class="QLineEdit" name="importPathEdit">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -860,7 +860,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_6">
+     <widget class="QLineEdit" name="workspacePathEdit">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -886,7 +886,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_7">
+     <widget class="QLineEdit" name="backUpPathEdit">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -912,7 +912,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_8">
+     <widget class="QLineEdit" name="exportPathEdit">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -938,7 +938,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_15">
+     <widget class="QPushButton" name="importFolderButton">
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -951,7 +951,7 @@
        <string>..</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_16">
+     <widget class="QPushButton" name="workspaceFolderButton">
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -964,7 +964,7 @@
        <string>..</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_17">
+     <widget class="QPushButton" name="backUpFolderButton">
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -977,7 +977,7 @@
        <string>..</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_18">
+     <widget class="QPushButton" name="exportFolderLabel">
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -1017,7 +1017,7 @@
      <number>25</number>
     </attribute>
    </widget>
-   <widget class="QPushButton" name="pushButton_8">
+   <widget class="QPushButton" name="img1LoadButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -1029,8 +1029,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_9">
+   <widget class="QPushButton" name="img2LoadButton">
     <property name="geometry">
      <rect>
       <x>1150</x>
@@ -1042,8 +1051,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_10">
+   <widget class="QPushButton" name="img3LoadButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -1055,8 +1073,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_11">
+   <widget class="QPushButton" name="img4LoadButton">
     <property name="geometry">
      <rect>
       <x>1150</x>
@@ -1068,8 +1095,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_19">
+   <widget class="QPushButton" name="img1BrightButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -1081,8 +1117,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_20">
+   <widget class="QPushButton" name="img1DarkButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -1094,34 +1139,17 @@
     <property name="text">
      <string/>
     </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_19">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>330</y>
-      <width>30</width>
-      <height>30</height>
-     </rect>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
     </property>
-    <property name="text">
-     <string/>
+    <property name="flat">
+     <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_20">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>380</y>
-      <width>30</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_21">
+   <widget class="QPushButton" name="img1MosaicButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -1133,8 +1161,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_22">
+   <widget class="QPushButton" name="img2BrightButton">
     <property name="geometry">
      <rect>
       <x>1150</x>
@@ -1146,8 +1183,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_23">
+   <widget class="QPushButton" name="img2DarkButton">
     <property name="geometry">
      <rect>
       <x>1150</x>
@@ -1159,8 +1205,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_24">
+   <widget class="QPushButton" name="img2MosaicButton">
     <property name="geometry">
      <rect>
       <x>1150</x>
@@ -1172,8 +1227,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_25">
+   <widget class="QPushButton" name="img3BrightButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -1185,8 +1249,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_26">
+   <widget class="QPushButton" name="img3DarkButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -1198,8 +1271,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_27">
+   <widget class="QPushButton" name="img3MosaicButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -1211,8 +1293,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_28">
+   <widget class="QPushButton" name="img4BrightButton">
     <property name="geometry">
      <rect>
       <x>1150</x>
@@ -1224,8 +1315,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_29">
+   <widget class="QPushButton" name="img4DarkButton">
     <property name="geometry">
      <rect>
       <x>1150</x>
@@ -1237,8 +1337,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_30">
+   <widget class="QPushButton" name="img4MosaicButton">
     <property name="geometry">
      <rect>
       <x>1150</x>
@@ -1249,6 +1358,15 @@
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
@@ -1256,54 +1374,54 @@
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>comboBox_2</tabstop>
-  <tabstop>pushButton</tabstop>
-  <tabstop>checkBox</tabstop>
-  <tabstop>spinBox</tabstop>
-  <tabstop>spinBox_2</tabstop>
-  <tabstop>checkBox_2</tabstop>
-  <tabstop>dateTimeEdit</tabstop>
-  <tabstop>dateTimeEdit_2</tabstop>
-  <tabstop>checkBox_3</tabstop>
-  <tabstop>lineEdit_3</tabstop>
-  <tabstop>checkBox_4</tabstop>
-  <tabstop>lineEdit_4</tabstop>
-  <tabstop>checkBox_5</tabstop>
-  <tabstop>comboBox</tabstop>
-  <tabstop>pushButton_4</tabstop>
-  <tabstop>pushButton_5</tabstop>
-  <tabstop>checkBox_6</tabstop>
-  <tabstop>lineEdit</tabstop>
-  <tabstop>checkBox_7</tabstop>
-  <tabstop>lineEdit_2</tabstop>
-  <tabstop>checkBox_8</tabstop>
-  <tabstop>dateTimeEdit_3</tabstop>
-  <tabstop>checkBox_9</tabstop>
-  <tabstop>comboBox_3</tabstop>
-  <tabstop>checkBox_10</tabstop>
-  <tabstop>checkBox_11</tabstop>
-  <tabstop>checkBox_12</tabstop>
-  <tabstop>checkBox_13</tabstop>
-  <tabstop>pushButton_6</tabstop>
-  <tabstop>pushButton_2</tabstop>
-  <tabstop>pushButton_12</tabstop>
-  <tabstop>lineEdit_5</tabstop>
-  <tabstop>pushButton_15</tabstop>
-  <tabstop>lineEdit_6</tabstop>
-  <tabstop>pushButton_16</tabstop>
-  <tabstop>lineEdit_7</tabstop>
-  <tabstop>pushButton_17</tabstop>
-  <tabstop>lineEdit_8</tabstop>
-  <tabstop>pushButton_18</tabstop>
-  <tabstop>pushButton_7</tabstop>
-  <tabstop>pushButton_13</tabstop>
-  <tabstop>pushButton_14</tabstop>
+  <tabstop>registerDivisionComboBox</tabstop>
+  <tabstop>registerButton</tabstop>
+  <tabstop>searchOpIdCheckBox</tabstop>
+  <tabstop>searchStartIdSpinBox</tabstop>
+  <tabstop>searchEndIdSpinBox</tabstop>
+  <tabstop>searchOpTimeCheckBox</tabstop>
+  <tabstop>searchStartTimeEdit</tabstop>
+  <tabstop>searchEndTimeEdit</tabstop>
+  <tabstop>searchOpLocationCheckBox</tabstop>
+  <tabstop>searchLocationLineEdit</tabstop>
+  <tabstop>searchOpNumCheckBox</tabstop>
+  <tabstop>searchNumLineEdit</tabstop>
+  <tabstop>searchOpDivisionCheckBox</tabstop>
+  <tabstop>searchDivisionComboBox</tabstop>
+  <tabstop>modifyButton</tabstop>
+  <tabstop>deleteButton</tabstop>
+  <tabstop>editOpNumCheckBox</tabstop>
+  <tabstop>editNumLineEdit</tabstop>
+  <tabstop>editOpLocationCheckBox</tabstop>
+  <tabstop>editLocationLineEdit</tabstop>
+  <tabstop>editOpTimeCheckBox</tabstop>
+  <tabstop>editTimeEdit</tabstop>
+  <tabstop>editOpDivisionCheckBox</tabstop>
+  <tabstop>editDivisionComboBox</tabstop>
+  <tabstop>editOpImg1CheckBox</tabstop>
+  <tabstop>editOpImg2CheckBox</tabstop>
+  <tabstop>editOpImg3CheckBox</tabstop>
+  <tabstop>editOpImg4CheckBox</tabstop>
+  <tabstop>determineButton</tabstop>
+  <tabstop>excelButton</tabstop>
+  <tabstop>duplicationButton</tabstop>
+  <tabstop>importPathEdit</tabstop>
+  <tabstop>importFolderButton</tabstop>
+  <tabstop>workspacePathEdit</tabstop>
+  <tabstop>workspaceFolderButton</tabstop>
+  <tabstop>backUpPathEdit</tabstop>
+  <tabstop>backUpFolderButton</tabstop>
+  <tabstop>exportPathEdit</tabstop>
+  <tabstop>exportFolderLabel</tabstop>
+  <tabstop>savePreferenceButton</tabstop>
+  <tabstop>helpButton</tabstop>
+  <tabstop>copyrightButton</tabstop>
   <tabstop>tableView</tabstop>
-  <tabstop>pushButton_8</tabstop>
-  <tabstop>pushButton_9</tabstop>
-  <tabstop>pushButton_10</tabstop>
-  <tabstop>pushButton_11</tabstop>
-  <tabstop>pushButton_3</tabstop>
+  <tabstop>img1LoadButton</tabstop>
+  <tabstop>img2LoadButton</tabstop>
+  <tabstop>img3LoadButton</tabstop>
+  <tabstop>img4LoadButton</tabstop>
+  <tabstop>searchButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

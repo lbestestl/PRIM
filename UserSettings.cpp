@@ -32,8 +32,8 @@ UserSettings::UserSettings()
         exportPath = in.readLine();
         searchStartId = in.readLine().toInt();
         searchEndId = in.readLine().toInt();
-        searchLocation = in.readLine();
         searchNum = in.readLine();
+        searchLocation = in.readLine(); 
     }
 }
 
@@ -70,7 +70,7 @@ void UserSettings::storeToFile() {
             << exportPath << "\n"
             << searchStartId << "\n"
             << searchEndId << "\n"
-            << searchLocation << "\n"
-            << searchNum;
+            << searchNum << "\n"
+            << searchLocation;
     }
 }

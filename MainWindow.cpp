@@ -30,56 +30,40 @@ MainWindow::~MainWindow()
 
 void MainWindow::compilingWidgets()
 {
-    imageSelectionButton.push_back(ui->pushButton_8);
-    imageSelectionButton.push_back(ui->pushButton_9);
-    imageSelectionButton.push_back(ui->pushButton_10);
-    imageSelectionButton.push_back(ui->pushButton_11);
+    imgLoadButton.push_back(ui->img1LoadButton);
+    imgLoadButton.push_back(ui->img2LoadButton);
+    imgLoadButton.push_back(ui->img3LoadButton);
+    imgLoadButton.push_back(ui->img4LoadButton);
 
-    folderSelectionButton.push_back(ui->pushButton_15);
-    folderSelectionButton.push_back(ui->pushButton_16);
-    folderSelectionButton.push_back(ui->pushButton_17);
-    folderSelectionButton.push_back(ui->pushButton_18);
+    folderSelectionButton.push_back(ui->importFolderButton);
+    folderSelectionButton.push_back(ui->workspaceFolderButton);
+    folderSelectionButton.push_back(ui->backUpFolderButton);
+    folderSelectionButton.push_back(ui->exportFolderLabel);
 
-    folderPathLine.push_back(ui->lineEdit_5);
-    folderPathLine.push_back(ui->lineEdit_6);
-    folderPathLine.push_back(ui->lineEdit_7);
-    folderPathLine.push_back(ui->lineEdit_8);
+    folderPathLine.push_back(ui->importPathEdit);
+    folderPathLine.push_back(ui->workspacePathEdit);
+    folderPathLine.push_back(ui->backUpPathEdit);
+    folderPathLine.push_back(ui->exportPathEdit);
 
-    imgLabel.push_back(ui->label);
-    imgLabel.push_back(ui->label_2);
-    imgLabel.push_back(ui->label_3);
-    imgLabel.push_back(ui->label_4);
+    imgLabel.push_back(ui->img1Label);
+    imgLabel.push_back(ui->img2Label);
+    imgLabel.push_back(ui->img3Label);
+    imgLabel.push_back(ui->img4Label);
 
-    mosaicButton.push_back(ui->pushButton_21);
-    mosaicButton.push_back(ui->pushButton_24);
-    mosaicButton.push_back(ui->pushButton_27);
-    mosaicButton.push_back(ui->pushButton_30);
-}
+    imgMosaicButton.push_back(ui->img1MosaicButton);
+    imgMosaicButton.push_back(ui->img2MosaicButton);
+    imgMosaicButton.push_back(ui->img3MosaicButton);
+    imgMosaicButton.push_back(ui->img4MosaicButton);
 
-void MainWindow::connectWidgets()
-{
-    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(registerData()));
-    connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(excelData()));
-    connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(searchData()));
-    connect(ui->pushButton_4, SIGNAL(clicked()), this, SLOT(modifyData()));
-    connect(ui->pushButton_5, SIGNAL(clicked()), this, SLOT(deleteData()));
-    connect(ui->pushButton_6, SIGNAL(clicked()), this, SLOT(determineData()));
-    connect(ui->pushButton_7, SIGNAL(clicked()), this, SLOT(savePreference()));
-    QSignalMapper* sigMapFile = new QSignalMapper(this);
-    for (int i = 0; i < imageSelectionButton.size(); ++i) {
-        connect(imageSelectionButton[i], SIGNAL(clicked()), sigMapFile, SLOT(map()));
-        sigMapFile->setMapping(imageSelectionButton[i], i);
-    }
-    connect(sigMapFile, SIGNAL(mapped(int)), this, SLOT(selectFile(int)));
+    imgBrightButton.push_back(ui->img1BrightButton);
+    imgBrightButton.push_back(ui->img2BrightButton);
+    imgBrightButton.push_back(ui->img3BrightButton);
+    imgBrightButton.push_back(ui->img4BrightButton);
 
-    QSignalMapper* sigMapFolder = new QSignalMapper(this);
-    for (int i = 0; i < folderSelectionButton.size(); ++i) {
-        connect(folderSelectionButton[i], SIGNAL(clicked()), sigMapFolder, SLOT(map()));
-        sigMapFolder->setMapping(folderSelectionButton[i], i);
-    }
-    connect(sigMapFolder, SIGNAL(mapped(int)), this, SLOT(selectFolder(int)));
-    connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection & )), this, SLOT(tableSelectionChanged()));
-    connect(ui->tableView->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(tableHorizontalzHeaderClicked(int)));
+    imgDarkButton.push_back(ui->img1DarkButton);
+    imgDarkButton.push_back(ui->img2DarkButton);
+    imgDarkButton.push_back(ui->img3DarkButton);
+    imgDarkButton.push_back(ui->img4DarkButton);
 }
 
 
@@ -90,45 +74,94 @@ void MainWindow::initWidgets()
     this->setWindowIcon(mainIcon);
     this->setWindowTitle("주정차단속관리 프로그램");
 
-    ui->dateTimeEdit->setDate(QDate::currentDate());
-    ui->dateTimeEdit_2->setDate(QDate::currentDate());
-    ui->dateTimeEdit_3->setDateTime(QDateTime::currentDateTime());
+    ui->searchStartTimeEdit->setDate(QDate::currentDate());
+    ui->searchEndTimeEdit->setDate(QDate::currentDate());
+    ui->editTimeEdit->setDateTime(QDateTime::currentDateTime());
 
-    ui->lineEdit_5->setText(UserSettings::Instance()->getImportPath());
-    ui->lineEdit_6->setText(UserSettings::Instance()->getWorkspacePath());
-    ui->lineEdit_7->setText(UserSettings::Instance()->getBackUpPath());
-    ui->lineEdit_8->setText(UserSettings::Instance()->getExportPath());
+    ui->importPathEdit->setText(UserSettings::Instance()->getImportPath());
+    ui->workspacePathEdit->setText(UserSettings::Instance()->getWorkspacePath());
+    ui->backUpPathEdit->setText(UserSettings::Instance()->getBackUpPath());
+    ui->exportPathEdit->setText(UserSettings::Instance()->getExportPath());
 
-    ui->lineEdit_3->setText(UserSettings::Instance()->getSearchLocation());
-    ui->lineEdit_4->setText(UserSettings::Instance()->getSearchNum());
-
-    ui->spinBox->setValue(UserSettings::Instance()->getSearchStartId());
-    ui->spinBox_2->setValue(UserSettings::Instance()->getSearchEndId());
+    ui->searchLocationLineEdit->setText(UserSettings::Instance()->getSearchLocation());
+    ui->searchNumLineEdit->setText(UserSettings::Instance()->getSearchNum());
+    ui->searchStartIdSpinBox->setValue(UserSettings::Instance()->getSearchStartId());
+    ui->searchEndIdSpinBox->setValue(UserSettings::Instance()->getSearchEndId());
 
     ui->tableView->setModel(&DBManage::Instance()->getDbq());
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     ui->tableView->horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
 
-    QIcon imageIcon;
-    imageIcon.addFile(QStringLiteral("image_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-    ui->pushButton_8->setIcon(imageIcon);
-    ui->pushButton_9->setIcon(imageIcon);
-    ui->pushButton_10->setIcon(imageIcon);
-    ui->pushButton_11->setIcon(imageIcon);
+    QIcon imgLoadIcon;
+    imgLoadIcon.addFile(QStringLiteral("image_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+    for (int i = 0; i < imgLoadButton.size(); i++)
+        imgLoadButton[i]->setIcon(imgLoadIcon);
 
     QIcon arrowUpIcon;
     arrowUpIcon.addFile(QStringLiteral("arrup_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-        ui->pushButton_19->setIcon(arrowUpIcon);
+    for (int i = 0; i < imgBrightButton.size(); i++)
+        imgBrightButton[i]->setIcon(arrowUpIcon);
 
     QIcon arrowDownIcon;
     arrowDownIcon.addFile(QStringLiteral("arrdown_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-    ui->pushButton_20->setIcon(arrowDownIcon);
+    for (int i = 0; i < imgDarkButton.size(); i++)
+        imgDarkButton[i]->setIcon(arrowDownIcon);
 
     QIcon paletteIcon;
     paletteIcon.addFile(QStringLiteral("palette_icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-    for (int i = 0; i < mosaicButton.size(); i++)
-        mosaicButton[i]->setIcon(paletteIcon);
+    for (int i = 0; i < imgMosaicButton.size(); i++)
+        imgMosaicButton[i]->setIcon(paletteIcon);
+}
+
+
+void MainWindow::connectWidgets()
+{
+    connect(ui->registerButton, SIGNAL(clicked()), this, SLOT(registerData()));
+    connect(ui->excelButton, SIGNAL(clicked()), this, SLOT(excelData()));
+    connect(ui->searchButton, SIGNAL(clicked()), this, SLOT(searchData()));
+    connect(ui->modifyButton, SIGNAL(clicked()), this, SLOT(modifyData()));
+    connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteData()));
+    connect(ui->determineButton, SIGNAL(clicked()), this, SLOT(determineData()));
+    connect(ui->savePreferenceButton, SIGNAL(clicked()), this, SLOT(savePreference()));
+
+    QSignalMapper* sigMapFile = new QSignalMapper(this);
+    for (int i = 0; i < imgLoadButton.size(); ++i) {
+        connect(imgLoadButton[i], SIGNAL(clicked()), sigMapFile, SLOT(map()));
+        sigMapFile->setMapping(imgLoadButton[i], i);
+    }
+    connect(sigMapFile, SIGNAL(mapped(int)), this, SLOT(selectFile(int)));
+
+    QSignalMapper* sigMapFolder = new QSignalMapper(this);
+    for (int i = 0; i < folderSelectionButton.size(); ++i) {
+        connect(folderSelectionButton[i], SIGNAL(clicked()), sigMapFolder, SLOT(map()));
+        sigMapFolder->setMapping(folderSelectionButton[i], i);
+    }
+    connect(sigMapFolder, SIGNAL(mapped(int)), this, SLOT(selectFolder(int)));
+
+    connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection & )), this, SLOT(tableSelectionChanged()));
+    connect(ui->tableView->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(tableHorizontalzHeaderClicked(int)));
+
+    QSignalMapper* sigMapMosaicButton = new QSignalMapper(this);
+    for (int i = 0; i < imgMosaicButton.size(); i++) {
+         connect(imgMosaicButton[i], SIGNAL(clicked()), sigMapMosaicButton, SLOT(map()));
+         sigMapMosaicButton->setMapping(imgMosaicButton[i], i);
+    }
+    connect(sigMapMosaicButton, SIGNAL(mapped(int)), this, SLOT(mosaicImage(int)));
+
+    QSignalMapper* sigMapBrightButton = new QSignalMapper(this);
+    for (int i = 0; i < imgBrightButton.size(); i++) {
+         connect(imgBrightButton[i], SIGNAL(clicked()), sigMapBrightButton, SLOT(map()));
+         sigMapBrightButton->setMapping(imgBrightButton[i], i);
+    }
+    connect(sigMapBrightButton, SIGNAL(mapped(int)), this, SLOT(brightImage(int)));
+
+    QSignalMapper* sigMapDarkButton = new QSignalMapper(this);
+    for (int i = 0; i < imgDarkButton.size(); i++) {
+         connect(imgDarkButton[i], SIGNAL(clicked()), sigMapDarkButton, SLOT(map()));
+         sigMapDarkButton->setMapping(imgDarkButton[i], i);
+    }
+    connect(sigMapDarkButton, SIGNAL(mapped(int)), this, SLOT(darkImage(int)));
 }
 
 
@@ -162,7 +195,7 @@ void MainWindow::registerData()
 
 void MainWindow::searchData()
 {
-    DBManage::Instance()->searchCrackdownInfo(ui->checkBox->isChecked(), ui->spinBox->value(), ui->spinBox_2->value(), ui->checkBox_4->isChecked(), ui->lineEdit_4->text(), ui->checkBox_3->isChecked(), ui->lineEdit_3->text(), ui->checkBox_2->isChecked(), ui->dateTimeEdit->text(), ui->dateTimeEdit_2->text(), ui->checkBox_5->isChecked(), ui->comboBox->currentText(), ui->tableView->horizontalHeader()->sortIndicatorSection(), ui->tableView->horizontalHeader()->sortIndicatorOrder());
+    DBManage::Instance()->searchCrackdownInfo(ui->searchOpIdCheckBox->isChecked(), ui->searchStartIdSpinBox->value(), ui->searchEndIdSpinBox->value(), ui->searchOpNumCheckBox->isChecked(), ui->searchNumLineEdit->text(), ui->searchOpLocationCheckBox->isChecked(), ui->searchLocationLineEdit->text(), ui->searchOpTimeCheckBox->isChecked(), ui->searchStartTimeEdit->text(), ui->searchEndTimeEdit->text(), ui->searchOpDivisionCheckBox->isChecked(), ui->searchDivisionComboBox->currentText(), ui->tableView->horizontalHeader()->sortIndicatorSection(), ui->tableView->horizontalHeader()->sortIndicatorOrder());
     ui->tableView->setColumnWidth(0, 70);
     ui->tableView->setColumnWidth(1, 110);
     ui->tableView->setColumnWidth(2, 220);
@@ -184,15 +217,15 @@ void MainWindow::modifyData()
         //선택한 자료가 1개일 경우
         int r = indexes.at(0).row();
         int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
-        DBManage::Instance()->modifyCrackdownInfo(id, ui->checkBox_6->isChecked(), ui->lineEdit->text(), ui->checkBox_7->isChecked(), ui->lineEdit_2->text(), ui->checkBox_8->isChecked(), ui->dateTimeEdit_3->text(), ui->checkBox_9->isChecked(), ui->comboBox_3->currentText(), ui->checkBox_10->isChecked(), info.img[0], ui->checkBox_11->isChecked(), info.img[1], ui->checkBox_12->isChecked(), info.img[2], ui->checkBox_13->isChecked(), info.img[3]);
+        DBManage::Instance()->modifyCrackdownInfo(id, ui->editOpNumCheckBox->isChecked(), ui->editNumLineEdit->text(), ui->editOpLocationCheckBox->isChecked(), ui->editLocationLineEdit->text(), ui->editOpTimeCheckBox->isChecked(), ui->editTimeEdit->text(), ui->editOpDivisionCheckBox->isChecked(), ui->editDivisionComboBox->currentText(), ui->editOpImg1CheckBox->isChecked(), info.img[0], ui->editOpImg2CheckBox->isChecked(), info.img[1], ui->editOpImg3CheckBox->isChecked(), info.img[2], ui->editOpImg4CheckBox->isChecked(), info.img[3]);
     } else {
         //선택한 자료가 복수일 경우 (일시의 경우 날짜만 수정)
         for (int i = 0; i < indexes.count(); i++) {
             int r = indexes.at(i).row();
             int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
-            QString dt = ui->dateTimeEdit_3->date().toString("yyyy-MM-dd");
+            QString dt = ui->editTimeEdit->date().toString("yyyy-MM-dd");
             dt += " " + QDateTime::fromString(DBManage::Instance()->getCrackdownInfo(id).time, "yyyy-MM-dd hh:mm:ss").time().toString("hh:mm:ss");
-            DBManage::Instance()->modifyCrackdownInfo(id, ui->checkBox_6->isChecked(), ui->lineEdit->text(), ui->checkBox_7->isChecked(), ui->lineEdit_2->text(), ui->checkBox_8->isChecked(), dt, ui->checkBox_9->isChecked(), ui->comboBox_3->currentText(), ui->checkBox_10->isChecked(), info.img[0], ui->checkBox_11->isChecked(), info.img[1], ui->checkBox_12->isChecked(), info.img[2], ui->checkBox_13->isChecked(), info.img[3]);
+            DBManage::Instance()->modifyCrackdownInfo(id, ui->editOpNumCheckBox->isChecked(), ui->editNumLineEdit->text(), ui->editOpLocationCheckBox->isChecked(), ui->editLocationLineEdit->text(), ui->editOpTimeCheckBox->isChecked(), dt, ui->editOpDivisionCheckBox->isChecked(), ui->editDivisionComboBox->currentText(), ui->editOpImg1CheckBox->isChecked(), info.img[0], ui->editOpImg2CheckBox->isChecked(), info.img[1], ui->editOpImg3CheckBox->isChecked(), info.img[2], ui->editOpImg4CheckBox->isChecked(), info.img[3]);
         }
     }
     searchData();
@@ -238,54 +271,7 @@ void MainWindow::determineData()
         exfile.insert(66, ".jpg");
         QFile a(deti.img[0]);
         a.copy(UserSettings::Instance()->getExportPath() + QDir::separator() + exfile);
-        /*QChar exfile[70];
-
-        exfile[0] = deti.time.at(0);
-        exfile[1] = deti.time.at(1);
-        exfile[2] = deti.time.at(2);
-        exfile[3] = deti.time.at(3);
-        exfile[4] = deti.time.at(5);
-        exfile[5] = deti.time.at(6);
-        exfile[6] = deti.time.at(8);
-        exfile[7] = deti.time.at(9);
-        exfile[8] = deti.time.at(11);
-        exfile[9] = deti.time.at(12);
-        exfile[10] = deti.time.at(14);
-        exfile[11] = deti.time.at(15);
-        exfile[12] = deti.time.at(17);
-        exfile[13] = deti.time.at(18);
-
-        exfile[14] = deti.num.at(0);
-        exfile[15] = deti.num.at(1);
-        exfile[16] = deti.num.at(2);
-        exfile[17] = deti.num.at(3);
-        exfile[18] = deti.num.at(4);
-        exfile[19] = deti.num.at(5);
-        exfile[20] = (deti.num.size() > 6)? deti.num.at(6) : ' ';
-        exfile[21] = (deti.num.size() > 7)? deti.num.at(7) : ' ';*/
-        /*QString exfile;
-        exfile += QDateTime::fromString(deti.time, "yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");
-        exfile += deti.num;
-        exfile.insert(26, "00000");
-        exfile.insert(31, deti.location);
-        qDebug() << deti.location.size();
-        qDebug() << deti.location.length();
-        qDebug() << deti.location.
-        exfile.insert(56, "999");
-        exfile.insert(65, "A");
-        exfile.insert(66, ".jpg");
-        a.copy(exfile);*/
     }
-    /*QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
-    if (indexes.empty())
-        return;
-
-    for (int i = 0; i < indexes.count(); i++) {
-        int r = indexes.at(i).row();
-        int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
-        CrackdownInfo deti = DBManage::Instance()->getCrackdownInfo(id);
-        QFile a(deti.img[0]);
-    }*/
 }
 
 
@@ -297,14 +283,14 @@ void MainWindow::excelData()
 
 void MainWindow::savePreference()
 {
-    UserSettings::Instance()->setImportPath(ui->lineEdit_5->text());
-    UserSettings::Instance()->setWorkspacePath(ui->lineEdit_6->text());
-    UserSettings::Instance()->setBackUpPath(ui->lineEdit_7->text());
-    UserSettings::Instance()->setExportPath(ui->lineEdit_8->text());
-    UserSettings::Instance()->setSearchStartId(ui->spinBox->value());
-    UserSettings::Instance()->setSearchEndId(ui->spinBox_2->value());
-    UserSettings::Instance()->setSearchLocation(ui->lineEdit_3->text());
-    UserSettings::Instance()->setSearchNum(ui->lineEdit_4->text());
+    UserSettings::Instance()->setImportPath(ui->importPathEdit->text());
+    UserSettings::Instance()->setWorkspacePath(ui->workspacePathEdit->text());
+    UserSettings::Instance()->setBackUpPath(ui->backUpPathEdit->text());
+    UserSettings::Instance()->setExportPath(ui->exportPathEdit->text());
+    UserSettings::Instance()->setSearchStartId(ui->searchStartIdSpinBox->value());
+    UserSettings::Instance()->setSearchEndId(ui->searchEndIdSpinBox->value());
+    UserSettings::Instance()->setSearchNum(ui->searchNumLineEdit->text());
+    UserSettings::Instance()->setSearchLocation(ui->searchLocationLineEdit->text());
     UserSettings::Instance()->storeToFile();
 }
 
@@ -331,51 +317,51 @@ void MainWindow::tableSelectionChanged()
     if (indexes.empty()) {
         return;
     } else if (indexes.count() == 1) {
-        ui->checkBox_6->setCheckState(Qt::Checked);
-        ui->checkBox_7->setCheckState(Qt::Checked);
-        ui->checkBox_8->setCheckState(Qt::Checked);
-        ui->checkBox_9->setCheckState(Qt::Checked);
-        ui->checkBox_6->setChecked(true);
-        ui->checkBox_7->setChecked(true);
-        ui->checkBox_8->setChecked(true);
-        ui->checkBox_9->setChecked(true);
-        ui->checkBox_10->setHidden(false);
-        ui->checkBox_11->setHidden(false);
-        ui->checkBox_12->setHidden(false);
-        ui->checkBox_13->setHidden(false);
-        ui->dateTimeEdit_3->setDisplayFormat("yyyy-MM-dd hh:mm:ss");
+        ui->editOpNumCheckBox->setCheckState(Qt::Checked);
+        ui->editOpLocationCheckBox->setCheckState(Qt::Checked);
+        ui->editOpTimeCheckBox->setCheckState(Qt::Checked);
+        ui->editOpDivisionCheckBox->setCheckState(Qt::Checked);
+        ui->editOpNumCheckBox->setChecked(true);
+        ui->editOpLocationCheckBox->setChecked(true);
+        ui->editOpTimeCheckBox->setChecked(true);
+        ui->editOpDivisionCheckBox->setChecked(true);
+        ui->editOpImg1CheckBox->setHidden(false);
+        ui->editOpImg2CheckBox->setHidden(false);
+        ui->editOpImg3CheckBox->setHidden(false);
+        ui->editOpImg4CheckBox->setHidden(false);
+        ui->editTimeEdit->setDisplayFormat("yyyy-MM-dd hh:mm:ss");
 
         int r = indexes.at(0).row();
         int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
         info = DBManage::Instance()->getCrackdownInfo(id);
-        ui->lineEdit->setText(info.num);
-        ui->lineEdit_2->setText(info.location);
-        ui->dateTimeEdit_3->setDateTime(QDateTime::fromString(info.time, "yyyy-MM-dd hh:mm:ss"));
+        ui->editNumLineEdit->setText(info.num);
+        ui->editLocationLineEdit->setText(info.location);
+        ui->editTimeEdit->setDateTime(QDateTime::fromString(info.time, "yyyy-MM-dd hh:mm:ss"));
         imgLabel[0]->setPixmap(QPixmap(info.img[0]));
         imgLabel[1]->setPixmap(QPixmap(info.img[1]));
         imgLabel[2]->setPixmap(QPixmap(info.img[2]));
         imgLabel[3]->setPixmap(QPixmap(info.img[3]));
     } else {
-        ui->checkBox_6->setCheckState(Qt::Unchecked);
-        ui->checkBox_7->setCheckState(Qt::Unchecked);
-        ui->checkBox_8->setCheckState(Qt::Unchecked);
-        ui->checkBox_9->setCheckState(Qt::Unchecked);
-        ui->checkBox_6->setChecked(false);
-        ui->checkBox_7->setChecked(false);
-        ui->checkBox_8->setChecked(false);
-        ui->checkBox_9->setChecked(false);
-        ui->checkBox_10->setCheckState(Qt::Unchecked);
-        ui->checkBox_11->setCheckState(Qt::Unchecked);
-        ui->checkBox_12->setCheckState(Qt::Unchecked);
-        ui->checkBox_13->setCheckState(Qt::Unchecked);
-        ui->checkBox_10->setHidden(true);
-        ui->checkBox_11->setHidden(true);
-        ui->checkBox_12->setHidden(true);
-        ui->checkBox_13->setHidden(true);
+        ui->editOpNumCheckBox->setCheckState(Qt::Unchecked);
+        ui->editOpLocationCheckBox->setCheckState(Qt::Unchecked);
+        ui->editOpTimeCheckBox->setCheckState(Qt::Unchecked);
+        ui->editOpDivisionCheckBox->setCheckState(Qt::Unchecked);
+        ui->editOpNumCheckBox->setChecked(false);
+        ui->editOpLocationCheckBox->setChecked(false);
+        ui->editOpTimeCheckBox->setChecked(false);
+        ui->editOpDivisionCheckBox->setChecked(false);
+        ui->editOpImg1CheckBox->setCheckState(Qt::Unchecked);
+        ui->editOpImg2CheckBox->setCheckState(Qt::Unchecked);
+        ui->editOpImg3CheckBox->setCheckState(Qt::Unchecked);
+        ui->editOpImg4CheckBox->setCheckState(Qt::Unchecked);
+        ui->editOpImg1CheckBox->setHidden(true);
+        ui->editOpImg2CheckBox->setHidden(true);
+        ui->editOpImg3CheckBox->setHidden(true);
+        ui->editOpImg4CheckBox->setHidden(true);
 
-        ui->dateTimeEdit_3->setDisplayFormat("yyyy-MM-dd");
-        ui->lineEdit->setText("");
-        ui->lineEdit_2->setText("");
+        ui->editTimeEdit->setDisplayFormat("yyyy-MM-dd");
+        ui->editNumLineEdit->setText("");
+        ui->editLocationLineEdit->setText("");
         imgLabel[0]->setPixmap(QPixmap(""));
         imgLabel[1]->setPixmap(QPixmap(""));
         imgLabel[2]->setPixmap(QPixmap(""));
@@ -386,12 +372,29 @@ void MainWindow::tableSelectionChanged()
 
 void MainWindow::tableHorizontalzHeaderClicked(int i)
 {
-    DBManage::Instance()->searchCrackdownInfo(ui->checkBox->isChecked(), ui->spinBox->value(), ui->spinBox_2->value(), ui->checkBox_4->isChecked(), ui->lineEdit_4->text(), ui->checkBox_3->isChecked(), ui->lineEdit_3->text(), ui->checkBox_2->isChecked(), ui->dateTimeEdit->text(), ui->dateTimeEdit_2->text(), ui->checkBox_5->isChecked(), ui->comboBox->currentText(), i, ui->tableView->horizontalHeader()->sortIndicatorOrder());
+    DBManage::Instance()->searchCrackdownInfo(ui->searchOpIdCheckBox->isChecked(), ui->searchStartIdSpinBox->value(), ui->searchEndIdSpinBox->value(), ui->searchOpNumCheckBox->isChecked(), ui->searchNumLineEdit->text(), ui->searchOpLocationCheckBox->isChecked(), ui->searchLocationLineEdit->text(), ui->searchOpTimeCheckBox->isChecked(), ui->searchStartTimeEdit->text(), ui->searchEndTimeEdit->text(), ui->searchOpDivisionCheckBox->isChecked(), ui->searchDivisionComboBox->currentText(), i, ui->tableView->horizontalHeader()->sortIndicatorOrder());
     ui->tableView->setColumnWidth(0, 70);
     ui->tableView->setColumnWidth(1, 110);
     ui->tableView->setColumnWidth(2, 220);
     ui->tableView->setColumnWidth(3, 160);
     ui->tableView->setColumnWidth(4, 120);
+}
+
+
+void MainWindow::mosaicImage(int i)
+{
+    setMouseTracking(true);
+
+}
+
+
+void MainWindow::brightImage(int i)
+{
+}
+
+
+void MainWindow::darkImage(int i)
+{
 }
 
 
