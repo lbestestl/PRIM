@@ -48,6 +48,8 @@ private slots:
     void determineData();
     void excelData();
     void savePreference();
+    void aboutAct();
+    void helpAct();
 
     void selectFile(int);
     void selectFolder(int);

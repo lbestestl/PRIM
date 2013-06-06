@@ -821,7 +821,7 @@
        <string>도움말</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="copyrightButton">
+     <widget class="QPushButton" name="aboutButton">
       <property name="geometry">
        <rect>
         <x>290</x>
@@ -1415,7 +1415,7 @@
   <tabstop>exportFolderLabel</tabstop>
   <tabstop>savePreferenceButton</tabstop>
   <tabstop>helpButton</tabstop>
-  <tabstop>copyrightButton</tabstop>
+  <tabstop>aboutButton</tabstop>
   <tabstop>tableView</tabstop>
   <tabstop>img1LoadButton</tabstop>
   <tabstop>img2LoadButton</tabstop>

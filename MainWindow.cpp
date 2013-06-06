@@ -9,6 +9,7 @@
 #include <QSignalMapper>
 #include <QIcon>
 #include <QDir>
+#include <QMessageBox>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -124,6 +125,7 @@ void MainWindow::connectWidgets()
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteData()));
     connect(ui->determineButton, SIGNAL(clicked()), this, SLOT(determineData()));
     connect(ui->savePreferenceButton, SIGNAL(clicked()), this, SLOT(savePreference()));
+    connect(ui->aboutButton, SIGNAL(clicked()), this, SLOT(aboutAct()));
 
     QSignalMapper* sigMapFile = new QSignalMapper(this);
     for (int i = 0; i < imgLoadButton.size(); ++i) {
@@ -215,16 +217,12 @@ void MainWindow::modifyData()
         return;
     } else if (indexes.count() == 1) {
         //선택한 자료가 1개일 경우
-        int r = indexes.at(0).row();
-        int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
-        DBManage::Instance()->modifyCrackdownInfo(id, ui->editOpNumCheckBox->isChecked(), ui->editNumLineEdit->text(), ui->editOpLocationCheckBox->isChecked(), ui->editLocationLineEdit->text(), ui->editOpTimeCheckBox->isChecked(), ui->editTimeEdit->text(), ui->editOpDivisionCheckBox->isChecked(), ui->editDivisionComboBox->currentText(), ui->editOpImg1CheckBox->isChecked(), info.img[0], ui->editOpImg2CheckBox->isChecked(), info.img[1], ui->editOpImg3CheckBox->isChecked(), info.img[2], ui->editOpImg4CheckBox->isChecked(), info.img[3]);
+        DBManage::Instance()->modifyCrackdownInfo(ui->tableView->model()->data(ui->tableView->model()->index(indexes.at(0).row(), 0)).toInt(), ui->editOpNumCheckBox->isChecked(), ui->editNumLineEdit->text(), ui->editOpLocationCheckBox->isChecked(), ui->editLocationLineEdit->text(), ui->editOpTimeCheckBox->isChecked(), ui->editTimeEdit->text(), ui->editOpDivisionCheckBox->isChecked(), ui->editDivisionComboBox->currentText(), ui->editOpImg1CheckBox->isChecked(), info.img[0], ui->editOpImg2CheckBox->isChecked(), info.img[1], ui->editOpImg3CheckBox->isChecked(), info.img[2], ui->editOpImg4CheckBox->isChecked(), info.img[3]);
     } else {
         //선택한 자료가 복수일 경우 (일시의 경우 날짜만 수정)
         for (int i = 0; i < indexes.count(); i++) {
-            int r = indexes.at(i).row();
-            int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
-            QString dt = ui->editTimeEdit->date().toString("yyyy-MM-dd");
-            dt += " " + QDateTime::fromString(DBManage::Instance()->getCrackdownInfo(id).time, "yyyy-MM-dd hh:mm:ss").time().toString("hh:mm:ss");
+            int id = ui->tableView->model()->data(ui->tableView->model()->index(indexes.at(i).row(), 0)).toInt();
+            QString dt = ui->editTimeEdit->date().toString("yyyy-MM-dd") + " " + QDateTime::fromString(DBManage::Instance()->getCrackdownInfo(id).time, "yyyy-MM-dd hh:mm:ss").time().toString("hh:mm:ss");
             DBManage::Instance()->modifyCrackdownInfo(id, ui->editOpNumCheckBox->isChecked(), ui->editNumLineEdit->text(), ui->editOpLocationCheckBox->isChecked(), ui->editLocationLineEdit->text(), ui->editOpTimeCheckBox->isChecked(), dt, ui->editOpDivisionCheckBox->isChecked(), ui->editDivisionComboBox->currentText(), ui->editOpImg1CheckBox->isChecked(), info.img[0], ui->editOpImg2CheckBox->isChecked(), info.img[1], ui->editOpImg3CheckBox->isChecked(), info.img[2], ui->editOpImg4CheckBox->isChecked(), info.img[3]);
         }
     }
@@ -295,6 +293,20 @@ void MainWindow::savePreference()
 }
 
 
+void MainWindow::aboutAct()
+{
+    QMessageBox::about(this, tr("About PRIM"), QString("<b>PRIM</b> version: %1 <br> "
+                               "<br>Copyright (c) 2013 %3<br>"
+                               "<br> Authors:"
+                               "<li><a href=\"mailto:%2\">%3</a> (%3) </li>").arg(tr("1306.1")).arg(tr("lbestestl@gmail.com")).arg(tr("lbestestl")));
+}
+
+
+void MainWindow::helpAct()
+{
+}
+
+
 void MainWindow::selectFile(int index)
 {
     QString fileName = QFileDialog::getOpenFileName(this);
@@ -331,16 +343,12 @@ void MainWindow::tableSelectionChanged()
         ui->editOpImg4CheckBox->setHidden(false);
         ui->editTimeEdit->setDisplayFormat("yyyy-MM-dd hh:mm:ss");
 
-        int r = indexes.at(0).row();
-        int id = ui->tableView->model()->data(ui->tableView->model()->index(r, 0)).toInt();
-        info = DBManage::Instance()->getCrackdownInfo(id);
+        info = DBManage::Instance()->getCrackdownInfo(ui->tableView->model()->data(ui->tableView->model()->index(indexes.at(0).row(), 0)).toInt());
         ui->editNumLineEdit->setText(info.num);
         ui->editLocationLineEdit->setText(info.location);
         ui->editTimeEdit->setDateTime(QDateTime::fromString(info.time, "yyyy-MM-dd hh:mm:ss"));
-        imgLabel[0]->setPixmap(QPixmap(info.img[0]));
-        imgLabel[1]->setPixmap(QPixmap(info.img[1]));
-        imgLabel[2]->setPixmap(QPixmap(info.img[2]));
-        imgLabel[3]->setPixmap(QPixmap(info.img[3]));
+        for (int i = 0; i < imgLabel.size(); i++)
+            imgLabel[i]->setPixmap(QPixmap(info.img[i]));
     } else {
         ui->editOpNumCheckBox->setCheckState(Qt::Unchecked);
         ui->editOpLocationCheckBox->setCheckState(Qt::Unchecked);
@@ -362,10 +370,8 @@ void MainWindow::tableSelectionChanged()
         ui->editTimeEdit->setDisplayFormat("yyyy-MM-dd");
         ui->editNumLineEdit->setText("");
         ui->editLocationLineEdit->setText("");
-        imgLabel[0]->setPixmap(QPixmap(""));
-        imgLabel[1]->setPixmap(QPixmap(""));
-        imgLabel[2]->setPixmap(QPixmap(""));
-        imgLabel[3]->setPixmap(QPixmap(""));
+        for (int i = 0; i < imgLabel.size(); i++)
+            imgLabel[i]->setPixmap(QPixmap(""));
     }
 }
 
