@@ -26,6 +26,8 @@ UserSettings::UserSettings()
         exit(0);
     } else {
         QTextStream in(&f);
+        id = in.readLine();
+        password = in.readLine();
         importPath = in.readLine();
         workspacePath = in.readLine();
         backUpPath = in.readLine();
@@ -64,7 +66,9 @@ void UserSettings::storeToFile() {
         exit(0);
     } else {
         QTextStream out(&f);
-        out << importPath << "\n"
+        out << id << "\n"
+            << password << "\n"
+            << importPath << "\n"
             << workspacePath << "\n"
             << backUpPath << "\n"
             << exportPath << "\n"

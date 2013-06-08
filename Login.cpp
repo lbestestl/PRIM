@@ -10,6 +10,8 @@
 #include "ui_Login.h"
 
 #include "MainWindow.h"
+#include "Security.h"
+#include "UserSettings.h"
 
 #include <QLineEdit>
 
@@ -81,10 +83,14 @@ void Login::loginButtonClicked()
         //id, pw 저장
     }
     //id, pw 불러옴
-    QString id = "cctv";
-    QString pw = "12345678";
-    if ((ui->idLineEdit->text() == id) && (ui->pwLineEdit->text() == pw))
+//    UserSettings::Instance()->setId(prim_security::cipher(prim_security::SHA256, ui->idLineEdit->text()));
+//    UserSettings::Instance()->setPassword(prim_security::cipher(prim_security::SHA256, ui->pwLineEdit->text()));
+//    UserSettings::Instance()->storeToFile();
+    QString id = UserSettings::Instance()->getId();
+    QString pw = UserSettings::Instance()->getPassword();
+    if ((prim_security::cipher(prim_security::SHA256, ui->idLineEdit->text()) == id) && (prim_security::cipher(prim_security::SHA256, ui->pwLineEdit->text()) == pw)) {
         emit accept();
+    }
 }
 
 

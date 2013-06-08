@@ -20,6 +20,10 @@ public:
     void storeToFile();
     void setDefault();
 
+    inline void setId(QString str) {id = str;}
+    inline QString getId() {return id;}
+    inline void setPassword(QString str) {password = str;}
+    inline QString getPassword() {return password;}
     inline void setImportPath(QString str) {importPath = str;}
     inline QString getImportPath() {return importPath;}
     inline void setExportPath(QString str) {exportPath = str;}
@@ -42,6 +46,9 @@ private:
     ~UserSettings();
 
     static UserSettings* instance;
+    QString id;
+    QString password;
+
     QString importPath;
     QString exportPath;
     QString workspacePath;

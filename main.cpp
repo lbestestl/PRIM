@@ -2,6 +2,7 @@
 #include "UserSettings.h"
 #include "DBManage.h"
 #include "Login.h"
+#include "Security.h"
 
 #include <QApplication>
 #include <QSharedData>
@@ -17,6 +18,8 @@ int main(int argc, char *argv[])
     a.setApplicationName("PRIM");
     a.setApplicationVersion("1306.1");
     //중복 실행 방지
+    QString str = prim_security::cipher(prim_security::AES256, "abc 123-1");
+    qDebug() << prim_security::decipher(prim_security::AES256, str);
     QSharedMemory shared("01adf13gmnwe2hj7");
     if (!shared.create(512, QSharedMemory::ReadWrite)) {
         QErrorMessage em;
@@ -32,4 +35,5 @@ int main(int argc, char *argv[])
     } else {
         return 0;
     }
+
 }
