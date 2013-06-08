@@ -15,6 +15,8 @@ DBManage::DBManage()
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(QDir::currentPath() + QDir::separator() + "crackdowndb.sqlite");
+    db.setUserName("cctv");
+    db.setPassword("12345678");
     db.open();
     if (!db.open()) {
         QErrorMessage em;

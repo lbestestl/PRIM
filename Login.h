@@ -11,6 +11,7 @@
 
 
 #include <QDialog>
+#include <QRegExpValidator>
 
 
 namespace Ui {
@@ -24,16 +25,19 @@ class Login : public QDialog
 public:
     explicit Login(QWidget *parent = 0);
     ~Login();
-    bool isCorrectPw();
     
 private:
+    void initWidgets();
     void connectWidgets();
     Ui::Login *ui;
+    QValidator *validator;
+    bool isLoginState;
 
 private slots:
+    void passwordLengthCheck(QString);
     void loginButtonClicked();
     void cancelButtonClicked();
-    void modifyButtonClicked();
+    void registerButtonClicked();
 };
 
 
