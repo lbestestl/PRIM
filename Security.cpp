@@ -56,12 +56,12 @@ std::string prim_security::cipherSHA256(std::string plainText)
 std::string prim_security::cipherAES256(std::string plainText, std::string key)
 {
     std::string result;
-    int len = plainText.length() + AES_BLOCK_SIZE;
     AES_KEY encKey;
-    unsigned char* out = new unsigned char[len];
     const unsigned char* uckey = reinterpret_cast<const unsigned char*>(key.c_str());
     const unsigned char* in = reinterpret_cast<const unsigned char*>(plainText.c_str());
-    AES_set_encrypt_key(akey, 128, &encKey);
+    int len = strlen((const char*)in) + AES_BLOCK_SIZE;
+    unsigned char* out = new unsigned char[len];
+    AES_set_encrypt_key(uckey, 256, &encKey);
     AES_encrypt(in, out, &encKey);
 
     if (out != NULL) {
@@ -69,15 +69,13 @@ std::string prim_security::cipherAES256(std::string plainText, std::string key)
         ss << out;
         result = ss.str();
     }
-    int i;
-    printf("original:\t");
-    for(i=0;*(in+i)!=0x00;i++)
+    printf("\noriginal:\t");
+    for(int i=0;*(in+i)!=0x00;i++)
         printf("%X ",*(in+i));
     printf("\nencrypted:\t");
-    for(i=0;*(out+i)!=0x00;i++)
+    for(int i=0;*(out+i)!=0x00;i++)
         printf("%X ",*(out+i));
-    printf("\n");
-    std::cout << out <<std::endl;
+
     delete out;
     return result;
 }
@@ -86,12 +84,13 @@ std::string prim_security::cipherAES256(std::string plainText, std::string key)
 std::string prim_security::decipherAES256(std::string cipherText, std::string key)
 {
     std::string result;
-    int len = cipherText.length();
     AES_KEY decKey;
-    unsigned char* out = new unsigned char[len];
     const unsigned char* uckey = reinterpret_cast<const unsigned char*>(key.c_str());
     const unsigned char* in = reinterpret_cast<const unsigned char*>(cipherText.c_str());
-    AES_set_decrypt_key(akey, 128, &decKey);
+    int len = strlen((const char*)in);
+    unsigned char* out = new unsigned char[len];
+
+    AES_set_decrypt_key(uckey, 256, &decKey);
     AES_decrypt(in, out, &decKey);
 
     if (out != NULL) {
@@ -99,15 +98,13 @@ std::string prim_security::decipherAES256(std::string cipherText, std::string ke
         ss << out;
         result = ss.str();
     }
-    int i;
-    std::cout << in << std::endl;
-    printf("encrypted:\t");
-    for(i=0;*(in+i)!=0x00;i++)
+    printf("\nencrypted:\t");
+    for(int i=0;*(in+i)!=0x00;i++)
         printf("%X ",*(in+i));
     printf("\ndecrypted:\t");
-    for(i=0;*(out+i)!=0x00;i++)
+    for(int i=0;*(out+i)!=0x00;i++)
         printf("%X ",*(out+i));
-    printf("\n");
+
     delete out;
     return result;
 }
