@@ -19,9 +19,9 @@
 
 QString prim_security::cipher(SslMode m, QString plainText)
 {
-    if (m == prim_security::AES256)
+    /*if (m == prim_security::AES256)
         return QString::fromStdString(cipherAES256(plainText.toStdString(), UserSettings::Instance()->getPassword().toStdString()));
-    else if (m == prim_security::SHA256)
+    else*/ if (m == prim_security::SHA256)
         return QString::fromStdString(cipherSHA256(plainText.toStdString()));
     else
         return "";
@@ -30,9 +30,9 @@ QString prim_security::cipher(SslMode m, QString plainText)
 
 QString prim_security::decipher(SslMode m, QString cipherText)
 {
-    if (m == prim_security::AES256)
+    /*if (m == prim_security::AES256)
         return QString::fromStdString(decipherAES256(cipherText.toStdString(), UserSettings::Instance()->getPassword().toStdString()));
-    else
+    else*/
         return "";
 }
 
@@ -52,7 +52,7 @@ std::string prim_security::cipherSHA256(std::string plainText)
     return ss.str();
 }
 
-
+/*
 std::string prim_security::cipherAES256(std::string plainText, std::string key)
 {
     std::string result;
@@ -61,12 +61,13 @@ std::string prim_security::cipherAES256(std::string plainText, std::string key)
     const unsigned char* in = reinterpret_cast<const unsigned char*>(plainText.c_str());
     int len = strlen((const char*)in) + AES_BLOCK_SIZE;
     unsigned char* out = new unsigned char[len];
-    AES_set_encrypt_key(uckey, 256, &encKey);
+    AES_set_encrypt_key(uckey, 128, &encKey);
     AES_encrypt(in, out, &encKey);
 
     if (out != NULL) {
         std::stringstream ss;
-        ss << out;
+        for(int i = 0; i < len; i++)
+            ss << out[i];
         result = ss.str();
     }
     printf("\noriginal:\t");
@@ -79,8 +80,8 @@ std::string prim_security::cipherAES256(std::string plainText, std::string key)
     delete out;
     return result;
 }
-
-
+*/
+/*
 std::string prim_security::decipherAES256(std::string cipherText, std::string key)
 {
     std::string result;
@@ -89,13 +90,15 @@ std::string prim_security::decipherAES256(std::string cipherText, std::string ke
     const unsigned char* in = reinterpret_cast<const unsigned char*>(cipherText.c_str());
     int len = strlen((const char*)in);
     unsigned char* out = new unsigned char[len];
+    memset(out, '0', len);
 
-    AES_set_decrypt_key(uckey, 256, &decKey);
+    AES_set_decrypt_key(uckey, 128, &decKey);
     AES_decrypt(in, out, &decKey);
 
     if (out != NULL) {
         std::stringstream ss;
-        ss << out;
+        for(int i = 0; i < len; i++)
+            ss << out[i];
         result = ss.str();
     }
     printf("\nencrypted:\t");
@@ -107,4 +110,4 @@ std::string prim_security::decipherAES256(std::string cipherText, std::string ke
 
     delete out;
     return result;
-}
+}*/
