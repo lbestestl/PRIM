@@ -3,6 +3,7 @@
 #include "DBManage.h"
 #include "UserSettings.h"
 #include "Dialog.h"
+#include "ImageEdit.h"
 
 #include <QDateTime>
 #include <QFileDialog>
@@ -17,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setMouseTracking(true);
     compilingWidgets();
     initWidgets();
     connectWidgets();
@@ -25,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
 }
 
 
